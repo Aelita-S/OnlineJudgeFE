@@ -1,6 +1,6 @@
 <template>
   <div class="view">
-    <Panel :title="contestId ? 'Contest Problem List' : 'Problem List'">
+    <Panel :title="contestId ? '比赛&练习 问题列表' : '问题列表'">
       <div slot="header">
         <el-input
           v-model="keyword"
@@ -70,7 +70,7 @@
           width="250">
           <div slot-scope="scope">
             <icon-btn name="编辑" icon="edit" @click.native="goEdit(scope.row.id)"></icon-btn>
-            <icon-btn v-if="contestId" name="Make Public" icon="clone"
+            <icon-btn v-if="contestId" name="添加到公共问题" icon="clone"
                       @click.native="makeContestProblemPublic(scope.row.id)"></icon-btn>
             <icon-btn icon="download" name="下载测试用例"
                       @click.native="downloadTestCase(scope.row.id)"></icon-btn>
@@ -81,11 +81,11 @@
       </el-table>
       <div class="panel-options">
         <el-button type="primary" size="small"
-                   @click="goCreateProblem" icon="el-icon-plus">Create
+                   @click="goCreateProblem" icon="el-icon-plus">创建
         </el-button>
         <el-button v-if="contestId" type="primary"
                    size="small" icon="el-icon-plus"
-                   @click="addProblemDialogVisible = true">Add From Public Problem
+                   @click="addProblemDialogVisible = true">从公共问题列表添加
         </el-button>
         <el-pagination
           class="page"

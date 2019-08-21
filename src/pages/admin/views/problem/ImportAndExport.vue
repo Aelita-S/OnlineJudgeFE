@@ -2,7 +2,7 @@
   <div>
     <div style="padding-bottom: 10px;">
     </div>
-    <panel title="Export Problems (beta)">
+    <panel title="选择要导出的问题(beta)">
       <div slot="header">
         <el-input
           v-model="keyword"

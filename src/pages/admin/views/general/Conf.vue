@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('m.Password')" label-width="90px" required>
-              <el-input v-model="smtp.password" type="password" placeholder="SMTP Server Password"></el-input>
+              <el-input v-model="smtp.password" type="password" placeholder="SMTP 授权码"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -32,9 +32,9 @@
           </el-col>
         </el-row>
       </el-form>
-      <el-button type="primary" @click="saveSMTPConfig">Save</el-button>
+      <el-button type="primary" @click="saveSMTPConfig">保存</el-button>
       <el-button type="warning" @click="testSMTPConfig"
-                 v-if="saved" :loading="loadingBtnTest">Send Test Email</el-button>
+                 v-if="saved" :loading="loadingBtnTest">发送测试邮件</el-button>
     </Panel>
 
     <Panel :title="$t('m.Website_Config')">

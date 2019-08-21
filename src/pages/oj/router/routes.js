@@ -87,11 +87,6 @@ export default [
         component: SubmissionList
       },
       {
-        name: '456',
-        path: '55',
-        component: Contest.ContestAnnouncements
-      },
-      {
         name: 'contest-problem-list',
         path: 'problems',
         component: Contest.ContestProblemList
