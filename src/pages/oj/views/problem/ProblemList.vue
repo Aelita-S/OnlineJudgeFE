@@ -58,7 +58,6 @@
               :key="tag.name"
               @click="disableTag(tag.name)"
               type="ghost"
-              :disabled="query.tag === tag.name"
               shape="circle"
               class="tag-btn">{{tag.name}}
       </Button>
@@ -66,9 +65,10 @@
       <Button v-for="tag in disabledTagList"
               :key="tag.name"
               @click="cancelTag(tag)"
-              type="reset"
+              type="ghost"
+              style="background:Gray"
               shape="circle"
-              class="tag-btn">{{tag.name}}
+              class="tag-btn"><Font color="white">{{tag.name}}</Font>
       </Button>
       </template>
 
