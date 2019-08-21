@@ -6,12 +6,12 @@
              :columns="ACMTableColumns"
              :data="problems"
              @on-row-click="goContestProblem"
-             no-data-text="No Problems"></Table>
+             no-data-text="无问题"></Table>
       <Table v-else
              :data="problems"
              :columns="OITableColumns"
              @on-row-click="goContestProblem"
-             no-data-text="No Problems"></Table>
+             no-data-text="无问题"></Table>
     </Panel>
   </div>
 </template>
@@ -33,15 +33,15 @@
             width: 150
           },
           {
-            title: 'Title',
+            title: '标题',
             key: 'title'
           },
           {
-            title: 'Total',
+            title: '提交数',
             key: 'submission_number'
           },
           {
-            title: 'AC Rate',
+            title: '正确率',
             render: (h, params) => {
               return h('span', this.getACRate(params.row.accepted_number, params.row.submission_number))
             }
@@ -54,7 +54,7 @@
             width: 150
           },
           {
-            title: 'Title',
+            title: '标题',
             key: 'title'
           }
         ]

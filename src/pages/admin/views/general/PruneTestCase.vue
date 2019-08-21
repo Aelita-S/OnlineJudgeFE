@@ -3,23 +3,23 @@
     <panel>
       <span slot="title">{{$t('m.Test_Case_Prune_Test_Case')}}
         <el-popover placement="right" trigger="hover">
-          These test cases are not owned by any problem, you can clean them safely.
+          这些测试用例不为任何问题所利用，您可以安全地清除他们
           <i slot="reference" class="el-icon-fa-question-circle import-user-icon"></i>
         </el-popover>
       </span>
       <el-table :data="data">
         <el-table-column
-          label="Last Modified">
+          label="上次更改">
           <template slot-scope="{row}">
             {{row.create_time | timestampFormat }}
           </template>
         </el-table-column>
         <el-table-column
           prop="id"
-          label="Test Case ID">
+          label="测试用例 ID">
         </el-table-column>
         <el-table-column
-          label="Option"
+          label="选项"
           fixed="right"
           width="200">
           <template slot-scope="{row}">
@@ -31,7 +31,7 @@
         <el-button type="warning" size="small"
                    :loading="loading"
                    icon="el-icon-fa-trash"
-                   @click="deleteTestCase()">Delete All
+                   @click="deleteTestCase()">全部删除
         </el-button>
       </div>
     </panel>

@@ -13,7 +13,7 @@
             <i-switch v-model="showChart"></i-switch>
           </p>
           <p>
-            <span>Auto Refresh(10s)</span>
+            <span>自动刷新(10s)</span>
             <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
           </p>
           <template v-if="isContestAdmin">
@@ -73,7 +73,7 @@
             }
           },
           {
-            title: 'User',
+            title: '用户名',
             align: 'center',
             render: (h, params) => {
               return h('a', {
@@ -114,7 +114,7 @@
             }
           },
           {
-            title: 'TotalTime',
+            title: '总时间',
             align: 'center',
             render: (h, params) => {
               return h('span', this.parseTotalTime(params.row.total_time))

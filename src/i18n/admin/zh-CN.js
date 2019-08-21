@@ -55,12 +55,12 @@ export const m = {
   IP: 'IP',
   Judger_Version: '判题机版本',
   Service_URL: '服务器URL',
-  Last_Heartbeat: '上一次心跳',
+  Last_Heartbeat: '上一次Heartbeat',
   Create_Time: '创建时间',
   // PruneTestCase
   Test_Case_Prune_Test_Case: '精简测试用例',
   // Problem.vue
-  Display_ID: 'Display ID',
+  Display_ID: '展示 ID',
   Title: '题目',
   Description: '描述',
   Input_Description: '输入描述',
@@ -77,7 +77,7 @@ export const m = {
   Special_Judge: 'Special Judge',
   Use_Special_Judge: '使用Special Judge',
   Special_Judge_Code: 'Special Judge Code',
-  SPJ_language: 'SPJ language',
+  SPJ_language: 'SPJ 语言',
   Compile: '编译',
   TestCase: '测试用例',
   IOMode: 'IO 类型',

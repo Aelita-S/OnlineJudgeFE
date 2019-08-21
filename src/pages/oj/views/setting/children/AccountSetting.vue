@@ -4,13 +4,13 @@
       <div class="left">
         <p class="section-title">{{$t('m.ChangePassword')}}</p>
         <Form class="setting-content" ref="formPassword" :model="formPassword" :rules="rulePassword">
-          <FormItem label="Old Password" prop="old_password">
+          <FormItem label="旧密码" prop="old_password">
             <Input v-model="formPassword.old_password" type="password"/>
           </FormItem>
-          <FormItem label="New Password" prop="new_password">
+          <FormItem label="新密码" prop="new_password">
             <Input v-model="formPassword.new_password" type="password"/>
           </FormItem>
-          <FormItem label="Confirm New Password" prop="again_password">
+          <FormItem label="确认新密码" prop="again_password">
             <Input v-model="formPassword.again_password" type="password"/>
           </FormItem>
           <FormItem v-if="visible.tfaRequired" label="Two Factor Auth" prop="tfa_code">
@@ -28,13 +28,13 @@
       <div class="right">
         <p class="section-title">{{$t('m.ChangeEmail')}}</p>
         <Form class="setting-content" ref="formEmail" :model="formEmail" :rules="ruleEmail">
-          <FormItem label="Current Password" prop="password">
+          <FormItem label="请输入现在的密码" prop="password">
             <Input v-model="formEmail.password" type="password"/>
           </FormItem>
-          <FormItem label="Old Email">
+          <FormItem label="旧邮箱">
             <Input v-model="formEmail.old_email" disabled/>
           </FormItem>
-          <FormItem label="New Email" prop="new_email">
+          <FormItem label="新邮箱" prop="new_email">
             <Input v-model="formEmail.new_email"/>
           </FormItem>
           <FormItem v-if="visible.tfaRequired" label="Two Factor Auth" prop="tfa_code">

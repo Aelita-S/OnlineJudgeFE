@@ -17,7 +17,7 @@ export const m = {
   Tags: 'Tags',
   Show: 'Show',
   // About.vue
-  Result_Explanation: 'Result Explanation',
+  Result_Explanation: '程序运行结果解释',
   Pending_Juding: 'You solution will be judged soon, please wait for result.',
   Compile_Error: "Failed to compile your source code. Click on the link to see compiler's output.",
   Accepted: 'Congratulations. Your solution is correct.',

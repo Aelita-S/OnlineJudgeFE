@@ -76,7 +76,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="Tag" :error="error.tags" required>
+            <el-form-item label="标签" :error="error.tags" required>
               <span class="tags">
                 <el-tag
                   v-for="tag in problem.tags"
@@ -98,7 +98,7 @@
                 @select="addTag"
                 :fetch-suggestions="querySearch">
               </el-autocomplete>
-              <el-button class="button-new-tag" v-else size="small" @click="inputVisible = true">+ New Tag</el-button>
+              <el-button class="button-new-tag" v-else size="small" @click="inputVisible = true">+ 新标签</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -112,11 +112,13 @@
             </el-form-item>
           </el-col>
         </el-row>
+        
+        <!-- 输入及输出样例-->
         <div>
           <el-form-item v-for="(sample, index) in problem.samples" :key="'sample'+index">
-            <Accordion :title="'Sample' + (index + 1)">
+            <Accordion :title="'样例' + (index + 1)">
               <el-button type="warning" size="small" icon="el-icon-delete" slot="header" @click="deleteSample(index)">
-                Delete
+                删除
               </el-button>
               <el-row :gutter="20">
                 <el-col :span="12">
@@ -143,6 +145,7 @@
             </Accordion>
           </el-form-item>
         </div>
+
         <div class="add-sample-btn">
           <button type="button" class="add-samples" @click="addSample()"><i class="el-icon-plus"></i>{{$t('m.Add_Sample')}}
           </button>
@@ -194,6 +197,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+
+          <!-- 文件测试用例Testcase -->
           <el-col :span="6">
             <el-form-item :label="$t('m.TestCase')" :error="error.testcase">
               <el-upload
@@ -203,7 +208,7 @@
                 :show-file-list="true"
                 :on-success="uploadSucceeded"
                 :on-error="uploadFailed">
-                <el-button size="small" type="primary" icon="el-icon-fa-upload">Choose File</el-button>
+                <el-button size="small" type="primary" icon="el-icon-fa-upload">选择文件</el-button>
               </el-upload>
             </el-form-item>
           </el-col>
@@ -227,6 +232,12 @@
               <el-input type="text" v-model="problem.io_mode.output"></el-input>
             </el-form-item>
           </el-col>
+
+
+
+         
+      
+        <!-- test -->
 
           <el-col :span="24">
             <el-table
@@ -255,7 +266,7 @@
             </el-table>
           </el-col>
         </el-row>
-
+        
         <el-form-item :label="$t('m.Source')">
           <el-input :placeholder="$t('m.Source')" v-model="problem.source"></el-input>
         </el-form-item>
@@ -281,10 +292,10 @@
     data () {
       return {
         rules: {
-          _id: {required: true, message: 'Display ID is required', trigger: 'blur'},
-          title: {required: true, message: 'Title is required', trigger: 'blur'},
-          input_description: {required: true, message: 'Input Description is required', trigger: 'blur'},
-          output_description: {required: true, message: 'Output Description is required', trigger: 'blur'}
+          _id: {required: true, message: '需要输入 展示 ID', trigger: 'blur'},
+          title: {required: true, message: '需要输入 题目', trigger: 'blur'},
+          input_description: {required: true, message: '需要输入 输入描述', trigger: 'blur'},
+          output_description: {required: true, message: '需要输入 输出描述', trigger: 'blur'}
         },
         loadingCompile: false,
         mode: '',
@@ -377,7 +388,7 @@
             this.testCaseUploaded = true
           })
         } else {
-          this.title = 'Add Problem'
+          this.title = '添加问题'
           for (let item of allLanguage.languages) {
             this.problem.languages.push(item.name)
           }

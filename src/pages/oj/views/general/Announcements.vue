@@ -1,13 +1,16 @@
 <template>
   <Panel shadow :padding="10">
     <div slot="title">
-      {{title}}
+      公告
     </div>
     <div slot="extra">
       <Button v-if="listVisible" type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
       <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{$t('m.Back')}}</Button>
     </div>
 
+    <div align="center" slot="title" v-if="!listVisible" >
+       {{announcement.title}}
+    </div>
     <transition-group name="announcement-animate" mode="in-out">
       <div class="no-announcement" v-if="!announcements.length" key="no-announcement">
         <p>{{$t('m.No_Announcements')}}</p>
@@ -16,9 +19,21 @@
         <ul class="announcements-container" key="list">
           <li v-for="announcement in announcements" :key="announcement.title">
             <div class="flex-container">
-              <div class="title"><a class="entry" @click="goAnnouncement(announcement)">
-                {{announcement.title}}</a></div>
-              <div class="date">{{announcement.create_time | localtime }}</div>
+              <div v-if="announcement.istop" class="title">
+                <tag color="red">置顶</tag>
+                <a class="entry" @click="goAnnouncement(announcement)">
+                <font style="color:rgb(45,140,240)">
+                  {{announcement.title}}
+                </font>
+              </a></div>
+              <div v-if="!announcement.istop" class="title">
+                <a class="entry" @click="goAnnouncement(announcement)">
+                <font style="color:rgb(45,140,240)">
+                  {{announcement.title}}
+                </font>
+              </a></div>
+              <div class="date">{{announcement.create_time | localtime}}</div>
+              <div class="date">{{announcement.last_update_time | localtime}}</div>
               <div class="creator"> By {{announcement.created_by.username}}</div>
             </div>
           </li>
@@ -76,7 +91,7 @@
         this.btnLoading = true
         api.getAnnouncementList(params).then(res => {
           this.btnLoading = false
-          this.announcements = res.data.data.results
+          this.announcements = this.sortList(res.data.data.results)
           this.total = res.data.data.total
         }, () => {
           this.btnLoading = false
@@ -86,10 +101,24 @@
         this.btnLoading = true
         api.getContestAnnouncementList(this.$route.params.contestID).then(res => {
           this.btnLoading = false
-          this.announcements = res.data.data
+          this.announcements = this.sortList(res.data.data)
         }, () => {
           this.btnLoading = false
         })
+      },
+      sortList (arr) {
+        let list = []
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].istop) {
+            list.push(arr[i])
+          }
+        }
+        for (let i = 0; i < arr.length; i++) {
+          if (!arr[i].istop) {
+            list.push(arr[i])
+          }
+        }
+        return list
       },
       goAnnouncement (announcement) {
         this.announcement = announcement
@@ -119,6 +148,7 @@
   .announcements-container {
     margin-top: -10px;
     margin-bottom: 10px;
+
     li {
       padding-top: 15px;
       list-style: none;
@@ -126,27 +156,33 @@
       margin-left: 20px;
       font-size: 16px;
       border-bottom: 1px solid rgba(187, 187, 187, 0.5);
+
       &:last-child {
         border-bottom: none;
       }
+
       .flex-container {
         .title {
           flex: 1 1;
           text-align: left;
           padding-left: 10px;
+
           a.entry {
             color: #495060;
+
             &:hover {
               color: #2d8cf0;
               border-bottom: 1px solid #2d8cf0;
             }
           }
         }
+
         .creator {
           flex: none;
           width: 200px;
           text-align: center;
         }
+
         .date {
           flex: none;
           width: 200px;
@@ -163,8 +199,9 @@
   .no-announcement {
     text-align: center;
     font-size: 16px;
-  }changeLocale
+  }
 
+  changeLocale
   .announcement-animate-enter-active {
     animation: fadeIn 1s;
   }

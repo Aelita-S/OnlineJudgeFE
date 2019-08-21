@@ -2,41 +2,43 @@
   <Row type="flex" :gutter="18">
     <Col :span=19>
     <Panel shadow>
-      <div slot="title">Problem List</div>
+      <div slot="title">问题列表</div>
       <div slot="extra">
         <ul class="filter">
           <li>
             <Dropdown @on-click="filterByDifficulty">
-              <span>{{query.difficulty === '' ? 'Difficulty' : query.difficulty}}
+              <span>{{query.difficulty === '' ? '难度' : query.difficulty === 'Low' ? '简单' : query.difficulty === 'Mid' ? '中等' : '困难'}}
                 <Icon type="arrow-down-b"></Icon>
               </span>
               <Dropdown-menu slot="list">
-                <Dropdown-item name="">All</Dropdown-item>
-                <Dropdown-item name="Low">Low</Dropdown-item>
-                <Dropdown-item name="Mid">Mid</Dropdown-item>
-                <Dropdown-item name="High">High</Dropdown-item>
+                <Dropdown-item name="">全部</Dropdown-item>
+                <Dropdown-item name="Low">简单</Dropdown-item>
+                <Dropdown-item name="Mid">中等</Dropdown-item>
+                <Dropdown-item name="High">困难</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
           </li>
           <li>
             <i-switch size="large" @on-change="handleTagsVisible">
-              <span slot="open">Tags</span>
-              <span slot="close">Tags</span>
+              <span slot="open">标签</span>
+              <span slot="close">标签</span>
             </i-switch>
           </li>
           <li>
             <Input v-model="query.keyword"
                    @on-enter="filterByKeyword"
                    @on-click="filterByKeyword"
-                   placeholder="keyword"
+                   placeholder="搜索关键词"
                    icon="ios-search-strong"/>
           </li>
+
           <li>
-            <Button type="info" @click="onReset">
-              <Icon type="refresh"></Icon>
-              Reset
+            <Button type="info" @click="pickone">
+              <Icon type="shuffle"></Icon>
+              随机选题
             </Button>
           </li>
+
         </ul>
       </div>
       <Table style="width: 100%; font-size: 16px;"
@@ -51,19 +53,28 @@
 
     <Col :span="5">
     <Panel :padding="10">
-      <div slot="title" class="taglist-title">Tags</div>
+      <div slot="title" class="taglist-title">标签</div>
       <Button v-for="tag in tagList"
               :key="tag.name"
-              @click="filterByTag(tag.name)"
+              @click="disableTag(tag.name)"
               type="ghost"
               :disabled="query.tag === tag.name"
               shape="circle"
               class="tag-btn">{{tag.name}}
       </Button>
+      <template v-if="isDisabled">
+      <Button v-for="tag in disabledTagList"
+              :key="tag.name"
+              @click="cancelTag(tag)"
+              type="reset"
+              shape="circle"
+              class="tag-btn">{{tag.name}}
+      </Button>
+      </template>
 
-      <Button long id="pick-one" @click="pickone">
-        <Icon type="shuffle"></Icon>
-        Pick one
+      <Button long id="pick-one" @click="onReset">
+        <Icon type="refresh"></Icon>
+        重置标签
       </Button>
     </Panel>
     <Spin v-if="loadings.tag" fix size="large"></Spin>
@@ -87,9 +98,11 @@
     data () {
       return {
         tagList: [],
+        disabledTagList: [],
+        isDisabled: false,
         problemTableColumns: [
           {
-            title: '#',
+            title: 'ID',
             key: '_id',
             width: 80,
             render: (h, params) => {
@@ -110,7 +123,7 @@
             }
           },
           {
-            title: 'Title',
+            title: '标题',
             width: 400,
             render: (h, params) => {
               return h('Button', {
@@ -133,12 +146,12 @@
             }
           },
           {
-            title: 'Level',
+            title: '难度',
             render: (h, params) => {
               let t = params.row.difficulty
-              let color = 'blue'
-              if (t === 'Low') color = 'green'
-              else if (t === 'High') color = 'yellow'
+              let color = 'orange'
+              if (t === 'Low') color = 'LightGreen'
+              else if (t === 'High') color = 'red'
               return h('Tag', {
                 props: {
                   color: color
@@ -147,11 +160,11 @@
             }
           },
           {
-            title: 'Total',
+            title: '提交数',
             key: 'submission_number'
           },
           {
-            title: 'AC Rate',
+            title: '正确率',
             render: (h, params) => {
               return h('span', this.getACRate(params.row.accepted_number, params.row.submission_number))
             }
@@ -175,6 +188,7 @@
     },
     mounted () {
       this.init()
+      this.getTagList()
     },
     methods: {
       init (simulate = false) {
@@ -212,6 +226,26 @@
           this.loadings.table = false
         })
       },
+      cancelTag (tag) {
+        this.disabledTagList = []
+        this.tagList.push(tag)
+        this.isDisabled = false
+        this.$router.push({name: 'problem-list'})
+      },
+      disableTag (name) {
+        for (let i = 0; i < this.disabledTagList.length; i++) {
+          this.tagList.push(this.disabledTagList[i])
+        }
+        this.disabledTagList = []
+        for (let i = 0; i < this.tagList.length; i++) {
+          if (this.tagList[i].name === name) {
+            this.disabledTagList.push(this.tagList[i])
+            this.tagList.splice(i, 1)
+            this.isDisabled = true
+          }
+        }
+        this.filterByTag(name)
+      },
       getTagList () {
         api.getProblemTagList().then(res => {
           this.tagList = res.data.data
@@ -238,7 +272,7 @@
         if (value) {
           this.problemTableColumns.push(
             {
-              title: 'Tags',
+              title: '标签',
               align: 'center',
               render: (h, params) => {
                 let tags = []
@@ -257,6 +291,9 @@
         }
       },
       onReset () {
+        this.disabledTagList = []
+        this.getTagList()
+        this.isDisabled = false
         this.$router.push({name: 'problem-list'})
       },
       pickone () {

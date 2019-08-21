@@ -54,7 +54,7 @@
       type: 'index'
     },
     {
-      title: 'Status',
+      title: '运行状态',
       align: 'center',
       render: (h, params) => {
         return h('Tag', {

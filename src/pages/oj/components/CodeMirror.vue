@@ -3,17 +3,17 @@
     <Row type="flex" justify="space-between" class="header">
       <Col :span=12>
       <div>
-        <span>Language:</span>
+        <span>语言:</span>
         <Select :value="language" @on-change="onLangChange" class="adjust">
           <Option v-for="item in languages" :key="item" :value="item">{{item}}
           </Option>
         </Select>
 
-        <Tooltip content="Reset to default code definition" placement="top" style="margin-left: 10px">
+        <Tooltip content="重置代码" placement="top" style="margin-left: 10px">
           <Button icon="refresh" @click="onResetClick"></Button>
         </Tooltip>
 
-        <Tooltip content="Upload file" placement="top" style="margin-left: 10px">
+        <Tooltip content="上传代码文件" placement="top" style="margin-left: 10px">
           <Button icon="upload" @click="onUploadFile"></Button>
         </Tooltip>
 
@@ -23,7 +23,7 @@
       </Col>
       <Col :span=12>
       <div class="fl-right">
-        <span>Theme:</span>
+        <span>主题:</span>
         <Select :value="theme" @on-change="onThemeChange" class="adjust">
           <Option v-for="item in themes" :key="item.label" :value="item.value">{{item.label}}
           </Option>

@@ -15,16 +15,16 @@
         <div class="last-info">
           <p class="last-info-title">{{$t('m.Last_Login')}}</p>
           <el-form label-width="80px" class="last-info-body">
-            <el-form-item label="Time:">
+            <el-form-item label="时间:">
               <span>{{session.last_activity | localtime}}</span>
             </el-form-item>
             <el-form-item label="IP:">
               <span>{{session.ip}}</span>
             </el-form-item>
-            <el-form-item label="OS">
+            <el-form-item label="系统:">
               <span>{{os}}</span>
             </el-form-item>
-            <el-form-item label="Browser:">
+            <el-form-item label="浏览器:">
               <span>{{browser}}</span>
             </el-form-item>
           </el-form>
@@ -50,13 +50,13 @@
       </panel>
     </el-col>
 
-    <el-col :md="14" :lg="16" v-if="isSuperAdmin">
+    <el-col :md="14" :lg="16">
       <div class="info-container">
-        <info-card color="#909399" icon="el-icon-fa-users" message="Total Users" iconSize="30px" class="info-item"
+        <info-card color="#909399" icon="el-icon-fa-users" message="总用户数" iconSize="30px" class="info-item"
                    :value="infoData.user_count"></info-card>
-        <info-card color="#67C23A" icon="el-icon-fa-list" message="Today Submissions" class="info-item"
+        <info-card color="#67C23A" icon="el-icon-fa-list" message="今日提交数" class="info-item"
                    :value="infoData.today_submission_count"></info-card>
-        <info-card color="#409EFF" icon="el-icon-fa-trophy" message="Recent Contests" class="info-item"
+        <info-card color="#409EFF" icon="el-icon-fa-trophy" message="最近的比赛" class="info-item"
                    :value="infoData.recent_contest_count"></info-card>
       </div>
       <panel style="margin-top: 5px">

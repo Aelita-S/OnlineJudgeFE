@@ -52,13 +52,13 @@
       </div>
     </template>
     <Modal v-model="uploadModalVisible"
-           title="Upload the avatar">
+           title="上传头像">
       <div class="upload-modal">
-        <p class="notice">Your avatar will be set to:</p>
+        <p class="notice">你的头像将会被设置为:</p>
         <img :src="uploadImgSrc"/>
       </div>
       <div slot="footer">
-        <Button @click="uploadAvatar" :loading="loadingUploadBtn">upload</Button>
+        <Button @click="uploadAvatar" :loading="loadingUploadBtn">上传</Button>
       </div>
     </Modal>
 
@@ -66,35 +66,29 @@
     <Form ref="formProfile" :model="formProfile">
       <Row type="flex" :gutter="30" justify="space-around">
         <Col :span="11">
-          <FormItem label="Real Name">
+          <FormItem label="姓名">
             <Input v-model="formProfile.real_name"/>
           </FormItem>
-          <Form-item label="School">
+          <Form-item label="昵称（开发中）">
             <Input v-model="formProfile.school"/>
           </Form-item>
-          <Form-item label="Major">
-            <Input v-model="formProfile.major"/>
-          </Form-item>
-          <FormItem label="Language">
+         
+          <!--<FormItem label="Language">
             <Select v-model="formProfile.language">
               <Option v-for="lang in languages" :key="lang.value" :value="lang.value">{{lang.label}}</Option>
-            </Select>
+            </Select> -->
           </FormItem>
           <Form-item>
-            <Button type="primary" @click="updateProfile" :loading="loadingSaveBtn">Save All</Button>
+            <Button type="primary" @click="updateProfile" :loading="loadingSaveBtn">保存修改</Button>
           </Form-item>
         </Col>
 
         <Col :span="11">
-          <Form-item label="Mood">
+          <Form-item label="学号">
             <Input v-model="formProfile.mood"/>
           </Form-item>
-          <Form-item label="Blog">
-            <Input v-model="formProfile.blog"/>
-          </Form-item>
-          <Form-item label="Github">
-            <Input v-model="formProfile.github"/>
-          </Form-item>
+         
+         
         </Col>
       </Row>
     </Form>

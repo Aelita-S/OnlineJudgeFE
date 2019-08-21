@@ -67,17 +67,17 @@
                 </Tag>
               </template>
               <template v-else-if="this.contestID && !OIContestRealTimePermission">
-                <Alert type="success" show-icon>Submitted successfully</Alert>
+                <Alert type="success" show-icon>上传成功</Alert>
               </template>
             </div>
             <div v-else-if="problem.my_status === 0">
-              <Alert type="success" show-icon>You have solved the problem</Alert>
+              <Alert type="success" show-icon>你已经解决了这个问题</Alert>
             </div>
             <div v-else-if="this.contestID && !OIContestRealTimePermission && submissionExists">
-              <Alert type="success" show-icon>You have submitted a solution.</Alert>
+              <Alert type="success" show-icon>你已经解决了这个问题</Alert>
             </div>
             <div v-if="contestEnded">
-              <Alert type="warning" show-icon>Contest has ended</Alert>
+              <Alert type="warning" show-icon>比赛已经结束</Alert>
             </div>
           </Col>
 
@@ -93,8 +93,8 @@
             <Button type="warning" icon="edit" :loading="submitting" @click="submitCode"
                     :disabled="problemSubmitDisabled || submitted"
                     class="fl-right">
-              <span v-if="submitting">Submitting</span>
-              <span v-else>Submit</span>
+              <span v-if="submitting">上传中</span>
+              <span v-else>上传</span>
             </Button>
           </Col>
         </Row>
@@ -106,29 +106,29 @@
         <template v-if="this.contestID">
           <VerticalMenu-item :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
             <Icon type="ios-photos"></Icon>
-            Problems
+            问题
           </VerticalMenu-item>
 
           <VerticalMenu-item :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
             <Icon type="chatbubble-working"></Icon>
-            Announcements
+            公告栏
           </VerticalMenu-item>
         </template>
 
         <VerticalMenu-item v-if="!this.contestID || OIContestRealTimePermission" :route="submissionRoute">
           <Icon type="navicon-round"></Icon>
-          Submissions
+          上传状况
         </VerticalMenu-item>
 
         <template v-if="this.contestID">
           <VerticalMenu-item v-if="!this.contestID || OIContestRealTimePermission"
                              :route="{name: 'contest-rank', params: {contestID: contestID}}">
             <Icon type="stats-bars"></Icon>
-            Rankings
+            排名
           </VerticalMenu-item>
           <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
             <Icon type="home"></Icon>
-            View Contest
+            比赛
           </VerticalMenu-item>
         </template>
       </VerticalMenu>
@@ -179,7 +179,7 @@
       <Card id="pieChart" :padding="0" v-if="!this.contestID || OIContestRealTimePermission">
         <div slot="title">
           <Icon type="ios-analytics"></Icon>
-          <span class="card-title">Statistic</span>
+          <span class="card-title">数据</span>
           <Button type="ghost" size="small" id="detail" @click="graphVisible = !graphVisible">Details</Button>
         </div>
         <div class="echarts">
@@ -359,7 +359,7 @@
       },
       onResetToTemplate () {
         this.$Modal.confirm({
-          content: 'Are you sure you want to reset your code?',
+          content: '你确定你想要重置你的代码吗？',
           onOk: () => {
             let template = this.problem.template
             if (template && template[this.language]) {
@@ -395,7 +395,7 @@
       },
       submitCode () {
         if (this.code.trim() === '') {
-          this.$error('Code can not be empty')
+          this.$error('代码不能为空')
           return
         }
         this.submissionId = ''
@@ -419,8 +419,8 @@
             this.submissionExists = true
             if (!detailsVisible) {
               this.$Modal.success({
-                title: 'Success',
-                content: 'Submit code successfully'
+                title: 'success',
+                content: '代码上传成功'
               })
               return
             }
@@ -428,7 +428,7 @@
             this.checkSubmissionStatus()
           }, res => {
             this.getCaptchaSrc()
-            if (res.data.data.startsWith('Captcha is required')) {
+            if (res.data.data.startsWith('需要验证码')) {
               this.captchaRequired = true
             }
             this.submitting = false
@@ -440,7 +440,7 @@
           if (this.submissionExists) {
             this.$Modal.confirm({
               title: '',
-              content: '<h3>You have submission in this problem, sure to cover it?<h3>',
+              content: '<h3>在这个问题中你已经上传，你确定要覆盖吗？<h3>',
               onOk: () => {
                 // 暂时解决对话框与后面提示对话框冲突的问题(否则一闪而过）
                 setTimeout(() => {

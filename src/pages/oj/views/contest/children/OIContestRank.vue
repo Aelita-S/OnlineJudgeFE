@@ -13,7 +13,7 @@
             <i-switch v-model="showChart"></i-switch>
           </p>
           <p>
-            <span>Auto Refresh(10s)</span>
+            <span>自动刷新(10s)</span>
             <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
           </p>
           <p v-if="isContestAdmin">
@@ -65,7 +65,7 @@
             }
           },
           {
-            title: 'User',
+            title: '用户名',
             align: 'center',
             render: (h, params) => {
               return h('a', {
@@ -86,7 +86,7 @@
             }
           },
           {
-            title: 'Total Score',
+            title: '总分数',
             align: 'center',
             render: (h, params) => {
               return h('a', {
@@ -147,7 +147,7 @@
           ],
           series: [
             {
-              name: 'Score',
+              name: '分数',
               type: 'bar',
               barMaxWidth: '80',
               data: [0],

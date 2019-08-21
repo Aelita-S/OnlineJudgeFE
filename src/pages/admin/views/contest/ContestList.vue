@@ -1,6 +1,6 @@
 <template>
   <div class="view">
-    <Panel title="Contest List">
+    <Panel title="比赛列表">
       <div slot="header">
         <el-input
           v-model="keyword"
@@ -29,17 +29,17 @@
         </el-table-column>
         <el-table-column
           prop="title"
-          label="Title">
+          label="标题">
         </el-table-column>
         <el-table-column
-          label="Rule Type"
+          label="规则"
           width="130">
           <template slot-scope="scope">
             <el-tag type="gray">{{scope.row.rule_type}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
-          label="Contest Type"
+          label="比赛类型"
           width="180">
           <template slot-scope="scope">
             <el-tag :type="scope.row.contest_type === 'Public' ? 'success' : 'primary'">
@@ -48,7 +48,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="Status"
+          label="状态"
           width="130">
           <template slot-scope="scope">
             <el-tag
@@ -59,7 +59,7 @@
         </el-table-column>
         <el-table-column
           width="100"
-          label="Visible">
+          label="是否可见">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.visible"
                        active-text=""
@@ -71,13 +71,13 @@
         <el-table-column
           fixed="right"
           width="250"
-          label="Operation">
+          label="操作">
           <div slot-scope="scope">
-            <icon-btn name="Edit" icon="edit" @click.native="goEdit(scope.row.id)"></icon-btn>
-            <icon-btn name="Problem" icon="list-ol" @click.native="goContestProblemList(scope.row.id)"></icon-btn>
-            <icon-btn name="Announcement" icon="info-circle"
+            <icon-btn name="编辑" icon="edit" @click.native="goEdit(scope.row.id)"></icon-btn>
+            <icon-btn name="问题列表" icon="list-ol" @click.native="goContestProblemList(scope.row.id)"></icon-btn>
+            <icon-btn name="比赛公告" icon="info-circle"
                       @click.native="goContestAnnouncement(scope.row.id)"></icon-btn>
-            <icon-btn icon="download" name="Download Accepted Submissions"
+            <icon-btn icon="download" name="下载正确答案"
                       @click.native="openDownloadOptions(scope.row.id)"></icon-btn>
           </div>
         </el-table-column>

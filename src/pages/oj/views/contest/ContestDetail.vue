@@ -23,7 +23,7 @@
                 <Input v-model="contestPassword" type="password"
                        placeholder="contest password" class="contest-password-input"
                        @on-enter="checkPassword"/>
-                <Button type="info" @click="checkPassword">Enter</Button>
+                <Button type="info" @click="checkPassword">进入</Button>
               </div>
             </Panel>
             <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;"></Table>
@@ -95,19 +95,19 @@
         contestPassword: '',
         columns: [
           {
-            title: 'StartAt',
+            title: '开始时间',
             render: (h, params) => {
               return h('span', time.utcToLocal(params.row.start_time))
             }
           },
           {
-            title: 'EndAt',
+            title: '结束时间',
             render: (h, params) => {
               return h('span', time.utcToLocal(params.row.end_time))
             }
           },
           {
-            title: 'ContestType',
+            title: '比赛类型',
             key: 'contest_type'
           },
           {
@@ -115,7 +115,7 @@
             key: 'rule_type'
           },
           {
-            title: 'Creator',
+            title: '创建者',
             render: (h, data) => {
               return h('span', data.row.created_by.username)
             }
@@ -144,12 +144,12 @@
       },
       checkPassword () {
         if (this.contestPassword === '') {
-          this.$error('Password can\'t be empty')
+          this.$error('密码不能为空')
           return
         }
         this.btnLoading = true
         api.checkContestPassword(this.contestID, this.contestPassword).then((res) => {
-          this.$success('Succeeded')
+          this.$success('成功')
           this.$store.commit(types.CONTEST_ACCESS, {access: true})
           this.btnLoading = false
         }, (res) => {

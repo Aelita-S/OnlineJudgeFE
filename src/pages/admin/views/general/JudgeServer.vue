@@ -23,21 +23,21 @@
         </el-table-column>
         <el-table-column
           prop="status"
-          label="Status">
+          label="当前状态">
           <template slot-scope="scope">
             <el-tag
               :type="scope.row.status === 'normal' ? 'success' : 'danger'">
-              {{ scope.row.status === 'normal' ? 'Normal' : 'Abnormal' }}
+              {{ scope.row.status === 'normal' ? '正常' : '异常' }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column
           prop="hostname"
-          label="Hostname">
+          label="镜像容器ID">
         </el-table-column>
         <el-table-column
           prop="task_number"
-          label="Task Number">
+          label="当前任务数">
         </el-table-column>
         <el-table-column
           prop="cpu_core"
@@ -45,22 +45,22 @@
         </el-table-column>
         <el-table-column
           prop="cpu_usage"
-          label="CPU Usage">
+          label="CPU 占用">
           <template slot-scope="scope">{{ scope.row.cpu_usage }}%</template>
         </el-table-column>
         <el-table-column
           prop="memory_usage"
-          label="Memory Usage">
+          label="内存占用">
           <template slot-scope="scope">{{ scope.row.memory_usage }}%</template>
         </el-table-column>
-        <el-table-column label="Disabled">
+        <el-table-column label="停用">
           <template slot-scope="{row}">
             <el-switch v-model="row.is_disabled" @change="handleDisabledSwitch(row.id, row.is_disabled)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="Options">
+          label="选项">
           <template slot-scope="scope">
             <icon-btn name="Delete" icon="trash" @click.native="deleteJudgeServer(scope.row.hostname)"></icon-btn>
           </template>

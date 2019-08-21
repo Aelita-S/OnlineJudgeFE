@@ -2,7 +2,7 @@
   <div class="flex-container">
     <div id="main">
       <Panel shadow>
-        <div slot="title">{{title}}</div>
+        <div slot="title">运行状况</div>
         <div slot="extra">
           <ul class="filter">
             <li>
@@ -64,14 +64,14 @@
         },
         columns: [
           {
-            title: 'When',
+            title: '提交时间',
             align: 'center',
             render: (h, params) => {
               return h('span', time.utcToLocal(params.row.create_time))
             }
           },
           {
-            title: 'ID',
+            title: '提交ID',
             align: 'center',
             render: (h, params) => {
               if (params.row.show_link) {
@@ -92,7 +92,7 @@
             }
           },
           {
-            title: 'Status',
+            title: '状态',
             align: 'center',
             render: (h, params) => {
               return h('Tag', {
@@ -103,7 +103,7 @@
             }
           },
           {
-            title: 'Problem',
+            title: '问题ID',
             align: 'center',
             render: (h, params) => {
               return h('span',
@@ -130,26 +130,26 @@
             }
           },
           {
-            title: 'Time',
+            title: '运行耗时',
             align: 'center',
             render: (h, params) => {
               return h('span', utils.submissionTimeFormat(params.row.statistic_info.time_cost))
             }
           },
           {
-            title: 'Memory',
+            title: '内存占用',
             align: 'center',
             render: (h, params) => {
               return h('span', utils.submissionMemoryFormat(params.row.statistic_info.memory_cost))
             }
           },
           {
-            title: 'Language',
+            title: '程序语言',
             align: 'center',
             key: 'language'
           },
           {
-            title: 'Author',
+            title: '提交者',
             align: 'center',
             render: (h, params) => {
               return h('a', {
@@ -251,7 +251,7 @@
           return
         }
         const judgeColumn = {
-          title: 'Option',
+          title: '选项',
           fixed: 'right',
           align: 'center',
           width: 90,
@@ -267,7 +267,7 @@
                   this.handleRejudge(params.row.id, params.index)
                 }
               }
-            }, 'Rejudge')
+            }, '重新运行')
           }
         }
         this.columns.push(judgeColumn)
