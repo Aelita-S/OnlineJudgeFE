@@ -26,10 +26,10 @@
           </li>
           <li>
             <Input v-model="query.keyword"
-                   @on-enter="filterByKeyword"
-                   @on-click="filterByKeyword"
-                   placeholder="搜索关键词"
-                   icon="ios-search-strong"/>
+                    @on-enter="filterByKeyword"
+                    @on-click="filterByKeyword"
+                    placeholder="搜索关键词"
+                    icon="ios-search-strong"/>
           </li>
 
           <li>
@@ -42,10 +42,10 @@
         </ul>
       </div>
       <Table style="width: 100%; font-size: 16px;"
-             :columns="problemTableColumns"
-             :data="problemList"
-             :loading="loadings.table"
-             disabled-hover></Table>
+              :columns="problemTableColumns"
+              :data="problemList"
+              :loading="loadings.table"
+              disabled-hover></Table>
     </Panel>
     <Pagination :total="total" :page-size="limit" @on-change="pushRouter" :current.sync="query.page"></Pagination>
 
@@ -205,6 +205,9 @@
           this.getTagList()
         }
         this.getProblemList()
+        if (this.query.tag !== '') {
+          this.disableTag(this.query.tag)
+        }
       },
       pushRouter () {
         this.$router.push({

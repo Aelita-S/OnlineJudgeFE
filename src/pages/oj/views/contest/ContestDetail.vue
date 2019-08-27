@@ -21,12 +21,13 @@
               <div v-html="contest.description" class="markdown-body"></div>
               <div v-if="passwordFormVisible" class="contest-password">
                 <Input v-model="contestPassword" type="password"
-                       placeholder="contest password" class="contest-password-input"
-                       @on-enter="checkPassword"/>
+                        placeholder="contest password" class="contest-password-input"
+                        @on-enter="checkPassword"/>
                 <Button type="info" @click="checkPassword">进入</Button>
               </div>
             </Panel>
-            <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;"></Table>
+            <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 10px;"></Table>
+            <announcement style="margin-bottom: 30px;"></announcement>
           </div>
         </template>
       </div>
@@ -39,34 +40,34 @@
           {{$t('m.Overview')}}
         </VerticalMenu-item>
 
-        <VerticalMenu-item :disabled="contestMenuDisabled"
-                           :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
+        <!-- <VerticalMenu-item :disabled="contestMenuDisabled"
+                            :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
           <Icon type="chatbubble-working"></Icon>
           {{$t('m.Announcements')}}
-        </VerticalMenu-item>
+        </VerticalMenu-item> -->
 
         <VerticalMenu-item :disabled="contestMenuDisabled"
-                           :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
+                            :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
           <Icon type="ios-photos"></Icon>
           {{$t('m.Problems')}}
         </VerticalMenu-item>
 
         <VerticalMenu-item v-if="OIContestRealTimePermission"
-                           :disabled="contestMenuDisabled"
-                           :route="{name: 'contest-submission-list'}">
+                            :disabled="contestMenuDisabled"
+                            :route="{name: 'contest-submission-list'}">
           <Icon type="navicon-round"></Icon>
           {{$t('m.Submissions')}}
         </VerticalMenu-item>
 
         <VerticalMenu-item v-if="OIContestRealTimePermission"
-                           :disabled="contestMenuDisabled"
-                           :route="{name: 'contest-rank', params: {contestID: contestID}}">
+                            :disabled="contestMenuDisabled"
+                            :route="{name: 'contest-rank', params: {contestID: contestID}}">
           <Icon type="stats-bars"></Icon>
           {{$t('m.Rankings')}}
         </VerticalMenu-item>
 
         <VerticalMenu-item v-if="showAdminHelper"
-                           :route="{name: 'acm-helper', params: {contestID: contestID}}">
+                            :route="{name: 'acm-helper', params: {contestID: contestID}}">
           <Icon type="ios-paw"></Icon>
           {{$t('m.Admin_Helper')}}
         </VerticalMenu-item>
@@ -82,10 +83,13 @@
   import { types } from '@/store'
   import { CONTEST_STATUS_REVERSE, CONTEST_STATUS } from '@/utils/constants'
   import time from '@/utils/time'
+  import Announcement from '../general/Announcements.vue'
 
   export default {
     name: 'ContestDetail',
-    components: {},
+    components: {
+      Announcement
+    },
     data () {
       return {
         CONTEST_STATUS: CONTEST_STATUS,

@@ -61,10 +61,10 @@
           width="100"
           label="是否可见">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.visible"
-                       active-text=""
-                       inactive-text=""
-                       @change="handleVisibleSwitch(scope.row)">
+            <el-switch  v-model="scope.row.visible"
+                        active-text=""
+                        inactive-text=""
+                        @change="handleVisibleSwitch(scope.row)">
             </el-switch>
           </template>
         </el-table-column>
@@ -92,9 +92,9 @@
         </el-pagination>
       </div>
     </Panel>
-    <el-dialog title="Download Contest Submissions"
-               width="30%"
-               :visible.sync="downloadDialogVisible">
+    <el-dialog  title="Download Contest Submissions"
+                width="30%"
+                :visible.sync="downloadDialogVisible">
       <el-switch v-model="excludeAdmin" active-text="Exclude admin submissions"></el-switch>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="downloadSubmissions">确 定</el-button>
