@@ -32,7 +32,7 @@
           </li>
           <li>
             <Input id="keyword" @on-enter="changeRoute" @on-click="changeRoute" v-model="query.keyword"
-                   icon="ios-search-strong" placeholder="搜索关键词"/>
+                    icon="ios-search-strong" placeholder="搜索关键词"/>
           </li>
         </ul>
       </div>
