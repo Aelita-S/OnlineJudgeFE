@@ -29,7 +29,7 @@ cd .\OnlineJudgeFE
 npm install
 # we use webpack DllReference to decrease the build time,
 
-npm config set registry https://registry.npm.taobao.org --global # 设置淘宝镜像
+npm config set registry https://registry.npm.taobao.org --global # 设置淘宝镜像(全局)
 npm install webpack -g
 
 # this command only needs execute once unless you upgrade the package in build/webpack.dll.conf.js
@@ -38,7 +38,6 @@ NODE_ENV=development npm run build:dll
 # the dev-server will set proxy table to your backend
 export TARGET=http://Your-backend
 
-npm install webpack -g
 # serve with hot reload at localhost:8080
 ```
 
@@ -51,16 +50,18 @@ cd .\OnlineJudgeFE
 npm install
 # we use webpack DllReference to decrease the build time,
 
-npm config set registry https://registry.npm.taobao.org --global # 设置淘宝镜像
+npm config set registry https://registry.npm.taobao.org --global # # 设置淘宝镜像(全局)
 npm install webpack -g
 
 # this command only needs execute once unless you upgrade the package in build/webpack.dll.conf.js
 npm run build:dll
 
 ```
-> 打开文件 \OnlineJudgeFE\config\index.js，起始位置加入一行以指定后台数据来源
+ + > 打开文件 \OnlineJudgeFE\config\index.js，起始位置加入一行以指定后台数据来源
 
-<code>process.env.TARGET = 'http://Your-backend'</code>
+   + <code>process.env.TARGET = 'http://Your-backend'</code>
+<br><br><br>
+> 运行
 ```bash
 # serve with hot reload at localhost:8080
 npm run dev
