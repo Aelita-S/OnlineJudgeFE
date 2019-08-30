@@ -1,4 +1,4 @@
-process.env.TARGET = 'http://172.31.100.180/'
+process.env.TARGET = 'http://127.0.0.1:8000/'
 'use strict'
 // Template version: 1.1.1
 // see http://vuejs-templates.github.io/webpack for documentation.

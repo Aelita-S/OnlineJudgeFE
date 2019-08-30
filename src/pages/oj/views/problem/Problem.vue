@@ -362,6 +362,7 @@
           content: '你确定你想要重置你的代码吗？',
           onOk: () => {
             let template = this.problem.template
+            this.code = ''
             if (template && template[this.language]) {
               this.code = template[this.language]
             }
