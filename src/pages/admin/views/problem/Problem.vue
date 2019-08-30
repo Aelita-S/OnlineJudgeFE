@@ -75,6 +75,7 @@
               </el-switch>
             </el-form-item>
           </el-col>
+          
           <el-col :span="8">
             <el-form-item label="标签" :error="error.tags" required>
               <span class="tags">
@@ -87,7 +88,20 @@
                   @close="closeTag(tag)"
                 >{{tag}}</el-tag>
               </span>
-              <el-autocomplete
+              <el-select v-if="inputVisible" 
+                        class="input-new-tag" 
+                        size="small" 
+                        placeholder="选择" 
+                        v-model="tagInput"
+                        @keyup.enter.native="addTag"
+                        @change="addTag">
+                <el-option 
+                v-for="tag in tags"
+                :label="tag" 
+                :value="tag"
+                :key="tag"></el-option>
+              </el-select>
+              <!-- <el-autocomplete
                 v-if="inputVisible"
                 size="mini"
                 class="input-new-tag"
@@ -97,9 +111,10 @@
                 @blur="addTag"
                 @select="addTag"
                 :fetch-suggestions="querySearch">
-              </el-autocomplete>
+              </el-autocomplete> -->
               <el-button class="button-new-tag" v-else size="small" @click="inputVisible = true">+ 新标签</el-button>
             </el-form-item>
+            
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('m.Languages')" :error="error.languages" required>
@@ -291,6 +306,7 @@
     },
     data () {
       return {
+        tags: [],
         rules: {
           _id: {required: true, message: '需要输入 展示 ID', trigger: 'blur'},
           title: {required: true, message: '需要输入 题目', trigger: 'blur'},
@@ -326,6 +342,7 @@
       }
     },
     mounted () {
+      this.getTags()
       this.routeName = this.$route.name
       if (this.routeName === 'edit-problem' || this.routeName === 'edit-contest-problem') {
         this.mode = 'edit'
@@ -344,7 +361,7 @@
           difficulty: 'Low',
           visible: true,
           share_submission: false,
-          tags: [],
+          tags: ['default'],
           languages: [],
           template: {},
           samples: [{input: '', output: ''}],
@@ -442,6 +459,16 @@
           this.problem.spj = !this.problem.spj
         }
       },
+      getTags () {
+        api.getProblemTagList().then(res => {
+          let tagList = []
+          for (let tag of res.data.data) {
+            tagList.push(tag.name)
+          }
+          this.tags = tagList
+        }).catch(() => {
+        })
+      },
       querySearch (queryString, cb) {
         api.getProblemTagList().then(res => {
           let tagList = []
@@ -461,12 +488,18 @@
         let inputValue = this.tagInput
         if (inputValue) {
           this.problem.tags.push(inputValue)
+          this.inputVisible = false
+          this.tagInput = ''
+          for (let i = 0; i < this.tags.length; i++) {
+            if (this.tags[i] === inputValue) {
+              this.tags.splice(i, 1)
+            }
+          }
         }
-        this.inputVisible = false
-        this.tagInput = ''
       },
       closeTag (tag) {
         this.problem.tags.splice(this.problem.tags.indexOf(tag), 1)
+        this.tags.push(tag)
       },
       addSample () {
         this.problem.samples.push({input: '', output: ''})

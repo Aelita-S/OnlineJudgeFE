@@ -4,6 +4,7 @@
       <SideMenu></SideMenu>
     </div>
     <div id="header">
+      <el-button size='mid' class="bt" @click="gohome">返回首页</el-button>
       <i class="el-icon-fa-font katex-editor" @click="katexVisible=true" ></i>
       <screen-full :width="14" :height="14" class="screen-full"></screen-full>
       <el-dropdown @command="handleCommand">
@@ -68,6 +69,12 @@
             this.$router.push({name: 'login'})
           })
         }
+      },
+      gohome () {
+        window.location.assign('/')
+        // window.open('/')
+        // window.close()
+        // 上面是一段神奇的代码,
       }
     },
     computed: {
@@ -147,7 +154,13 @@
     margin-right: 5px;
     /*font-size: 18px;*/
   }
-
+  .bt {
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 0.5%;
+    float: left;
+    
+  }
 
 
 </style>
