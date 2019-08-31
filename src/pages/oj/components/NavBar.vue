@@ -58,7 +58,7 @@
         </div>
       </template>
       <template v-else>
-        <img class="avatar" :src="avatar"/>
+        <a @click="goPerson"><img class="avatar" :src="avatar"/></a>
         <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
           <Button type="text" class="drop-menu-title">{{ user.username }}
             <Icon type="arrow-down-b"></Icon>
@@ -120,6 +120,9 @@
           visible: true,
           mode: mode
         })
+      },
+      goPerson () {
+        this.$router.push('/user-home?username=' + this.user.username)
       }
     },
     computed: {
@@ -189,7 +192,7 @@
     width: 40px;
     height: 40px;
     float: right;
-    margin-right: 10px;
+    margin-right: 13px;
     margin-top: 10px;
     border-radius: 50%;
     box-shadow: 0 1px 1px 0;
