@@ -58,6 +58,7 @@
         </div>
       </template>
       <template v-else>
+        <img class="avatar" :src="avatar"/>
         <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
           <Button type="text" class="drop-menu-title">{{ user.username }}
             <Icon type="arrow-down-b"></Icon>
@@ -84,17 +85,29 @@
   import { mapGetters, mapActions } from 'vuex'
   import login from '@oj/views/user/Login'
   import register from '@oj/views/user/Register'
+  import api from '@oj/api'
 
   export default {
     components: {
       login,
       register
     },
+    data () {
+      return {
+        avatar: {}
+      }
+    },
     mounted () {
       this.getProfile()
+      this.getAvatar()
     },
     methods: {
       ...mapActions(['getProfile', 'changeModalStatus']),
+      getAvatar () {
+        api.getUserInfo(this.user.username).then(res => {
+          this.avatar = res.data.data.avatar
+        })
+      },
       handleRoute (route) {
         if (route && route.indexOf('admin') < 0) {
           this.$router.push(route)
@@ -154,7 +167,7 @@
       float: right;
       margin-right: 30px;
       position: absolute;
-      right: 10px;
+      right: 25px;
       &-title {
         font-size: 18px;
       }
@@ -172,4 +185,14 @@
       font-weight: 600;
     }
   }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    float: right;
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 50%;
+    box-shadow: 0 1px 1px 0;
+  }
+
 </style>
