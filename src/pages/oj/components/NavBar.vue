@@ -47,7 +47,7 @@
           <Button type="ghost"
                   ref="loginBtn"
                   shape="circle"
-                  @click="handleBtnClick('login')">{{$t('m.Login')}}
+                  @click="loginGetAvatat">{{$t('m.Login')}}
           </Button>
           <Button v-if="website.allow_register"
                   type="ghost"
@@ -107,6 +107,10 @@
         api.getUserInfo(this.user.username).then(res => {
           this.avatar = res.data.data.avatar
         })
+      },
+      loginGetAvatat () {
+        this.handleBtnClick('login')
+        this.getAvatar()
       },
       handleRoute (route) {
         if (route && route.indexOf('admin') < 0) {
