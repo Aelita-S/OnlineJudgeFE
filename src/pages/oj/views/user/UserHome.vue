@@ -74,7 +74,7 @@
       }
     },
     mounted () {
-      this.freshProblemDisplayID()
+      this.init()
     },
     methods: {
       ...mapActions(['changeDomTitle']),
