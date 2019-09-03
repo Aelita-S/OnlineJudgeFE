@@ -1,6 +1,8 @@
 <template>
   <div class="setting-main">
     <div class="section-title">{{$t('m.Avatar_Setting')}}</div>
+
+    <!-- 如果没有上传图片则显示点击上传按钮 -->
     <template v-if="!avatarOption.imgSrc">
       <Upload type="drag"
               class="mini-container"
@@ -9,7 +11,7 @@
               :before-upload="handleSelectFile">
         <div style="padding: 30px 0">
           <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-          <p>Drop here, or click to select manually</p>
+          <p>点击这里上传图片或者把图片拖拽到此处</p>
         </div>
       </Upload>
     </template>
@@ -31,26 +33,36 @@
           </vueCropper>
         </div>
         <ButtonGroup vertical class="cropper-btn">
+          <div  @mouseenter="mouseEnter(1)" @mouseleave="mouseLeave">
           <Button @click="rotate('left')">
             <Icon type="arrow-return-left" size="20"></Icon>
-          </Button>
+            <p v-if="itemHoverIndex==1" class='itemHover'>左旋转</p>
+          </Button></div>
+          <div  @mouseenter="mouseEnter(2)" @mouseleave="mouseLeave">
           <Button @click="rotate('right')">
             <Icon type="arrow-return-right" size="20"></Icon>
-          </Button>
+            <p v-if="itemHoverIndex==2" class='itemHover'>右旋转</p>
+          </Button></div>
+          <div  @mouseenter="mouseEnter(3)" @mouseleave="mouseLeave">
           <Button @click="reselect">
-            <Icon type="refresh" size="20"></Icon>
-          </Button>
+            <Icon type="refresh" size="17"></Icon>
+            <p v-if="itemHoverIndex==3" class='itemHover'>取消</p>
+          </Button></div>
+          <div  @mouseenter="mouseEnter(4)" @mouseleave="mouseLeave">
           <Button @click="finishCrop">
-            <Icon type="checkmark-round" size="20"></Icon>
-          </Button>
+            <Icon type="checkmark-round" size="18"></Icon>
+            <p v-if="itemHoverIndex==4" class='itemHover'>确定</p>
+          </Button></div>
         </ButtonGroup>
-        <div class="cropper-preview" :style="previewStyle">
+        <!-- <div class="cropper-preview" :style="previewStyle">
           <div :style=" preview.div">
             <img :src="avatarOption.imgSrc" :style="preview.img">
           </div>
-        </div>
+        </div> -->
       </div>
     </template>
+
+    <!-- 上传头像确定框 -->
     <Modal v-model="uploadModalVisible"
            title="上传头像">
       <div class="upload-modal">
@@ -62,6 +74,7 @@
       </div>
     </Modal>
 
+    <!-- 输入框 -->
     <div class="section-title">{{$t('m.Profile_Setting')}}</div>
     <Form ref="formProfile" :model="formProfile">
       <Row type="flex" :gutter="30" justify="space-around">
@@ -72,7 +85,6 @@
           <Form-item label="昵称（开发中）">
             <Input v-model="formProfile.school"/>
           </Form-item>
-         
           <!--<FormItem label="Language">
             <Select v-model="formProfile.language">
               <Option v-for="lang in languages" :key="lang.value" :value="lang.value">{{lang.label}}</Option>
@@ -109,6 +121,7 @@
     data () {
       return {
         loadingSaveBtn: false,
+        itemHoverIndex: 0,
         loadingUploadBtn: false,
         uploadModalVisible: false,
         preview: {},
@@ -139,6 +152,14 @@
       })
     },
     methods: {
+      mouseEnter (index) {
+        console.log('enter', index)
+        this.itemHoverIndex = index
+      },
+      mouseLeave () {
+        this.itemHoverIndex = 0
+        console.log('leave', this.itemHoverIndex)
+      },
       checkFileType (file) {
         if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(file.name)) {
           this.$Notice.warning({
@@ -233,6 +254,7 @@
     computed: {
       previewStyle () {
         return {
+          'margin-left': '50px',
           'width': this.preview.w + 'px',
           'height': this.preview.h + 'px',
           'overflow': 'hidden'
@@ -273,6 +295,14 @@
     }
   }
 
+  .itemHover{
+	display:inline-block;
+	transform-origin: 100% 0%;
+
+	-webkit-animation: fadeIn 0.3s ease-in-out;
+	animation: fadeIn 0.3s ease-in-out;
+
+}
   .upload-modal {
     .notice {
       font-size: 16px;
