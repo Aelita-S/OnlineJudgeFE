@@ -1,8 +1,12 @@
 <template>
   <div class="container">
+
     <div class="avatar-container">
-      <img class="avatar" :src="profile.avatar"/>
+      <img class="avatar" :src="profile.avatar">
+        <div class="avatar-mask"/>
+      </img>
     </div>
+
     <Card :padding="100">
       <div v-if="profile.user">
         <p style="margin-top: -10px">
@@ -140,19 +144,55 @@
       margin-top: 8px;
       margin-bottom: 8px;
     }
+
     .avatar-container {
+      &:hover {
+        .avatar-mask {
+          width: 150px;
+          height: 150px;
+          -moz-border-radius: 150px;
+          -webkit-border-radius: 150px;
+          border-radius: 150px;
+          -moz-box-shadow: 0 3px 0 #00abf2 inset;
+          -webkit-box-shadow: 0 3px 0 #00abf2 inset;
+          box-shadow: 0 3px 0 #00abf2 inset;
+          animation: rotate-360 2s linear infinite;
+        }
+      }
+      @keyframes rotate-360 {
+        from {
+          -moz-transform: rotate(0);
+          -ms-transform: rotate(0);
+          -webkit-transform: rotate(0);
+          transform: rotate(0);
+        }
+        to {
+          -moz-transform: rotate(360deg);
+          -ms-transform: rotate(360deg);
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+
+      position: relative;
       position: absolute;
-      left: 50%;
-      transform: translate(-50%);
-      z-index: 1;
-      top: -90px;
+        left: 50%;
+        transform: translate(-50%);
+        z-index: 1;
+        top: -90px;
       .avatar {
         width: 140px;
         height: 140px;
         border-radius: 50%;
         box-shadow: 0 1px 1px 0;
+        }
+      .avatar-mask {
+        margin: -150px 0px 0px 0px;
+        width: 100px;
+        height: 100px;
       }
     }
+
     .emphasis {
       font-size: 20px;
       font-weight: 600;

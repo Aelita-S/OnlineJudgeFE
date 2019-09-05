@@ -5,8 +5,7 @@
         <div class="menu">
           <Menu accordion @on-select="goRoute" :activeName="activeName" style="text-align: center;" width="auto">
             <div class="avatar-editor">
-              <div class="avatar-container">
-                
+              <div class="avatar-container"> 
                 <img class="avatar" :src="profile.avatar">
                   <div class="avatar-mask"/>
                 </img>
@@ -77,9 +76,9 @@
               opacity: .8;
               width: 150px;
               height: 150px;
-              -moz-border-radius: 240px;
-              -webkit-border-radius: 240px;
-              border-radius: 240px;
+              -moz-border-radius: 150px;
+              -webkit-border-radius: 150px;
+              border-radius: 150px;
               -moz-box-shadow: 0 4px 0 #00abf2 inset;
               -webkit-box-shadow: 0 4px 0 #00abf2 inset;
               box-shadow: 0 4px 0 #00abf2 inset;

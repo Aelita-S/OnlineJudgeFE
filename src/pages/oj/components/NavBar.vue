@@ -58,7 +58,11 @@
         </div>
       </template>
       <template v-else>
-        <a @click="goPerson"><img class="avatar" :src="avatar"/></a>
+        <div class="avatar-container">
+          <a @click="goPerson"><img class="avatar" :src="avatar">
+            <div class="avatar-mask"/>
+          </img></a>
+        </div>
         <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
           <Button type="text" class="drop-menu-title">{{ user.username }}
             <Icon type="arrow-down-b"></Icon>
@@ -148,50 +152,82 @@
 </script>
 
 <style lang="less" scoped>
-  #header {
-    min-width: 1100px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 60px;
-    width: 100%;
-    z-index: 1000;
-    background-color: #fff;
-    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
-    .oj-menu {
-      background: #fdfdfd;
-    }
-
-    .logo {
-      margin-left: 2%;
-      margin-right: 2%;
-      font-size: 20px;
-      float: left;
-      line-height: 60px;
-    }
-
-    .drop-menu {
-      float: right;
-      margin-right: 30px;
-      position: absolute;
-      right: 25px;
-      &-title {
-        font-size: 18px;
-      }
-    }
-    .btn-menu {
-      font-size: 16px;
-      float: right;
-      margin-right: 10px;
-    }
+#header {
+  min-width: 1100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  z-index: 1000;
+  background-color: #fff;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  .oj-menu {
+    background: #fdfdfd;
   }
 
-  .modal {
+  .logo {
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 20px;
+    float: left;
+    line-height: 60px;
+  }
+
+  .drop-menu {
+    float: right;
+    margin-right: 30px;
+    position: absolute;
+    right: 25px;
     &-title {
       font-size: 18px;
-      font-weight: 600;
     }
   }
+  .btn-menu {
+    font-size: 16px;
+    float: right;
+    margin-right: 10px;
+  }
+}
+
+.modal {
+  &-title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+
+.avatar-container {
+  &:hover {
+    .avatar-mask {
+      width: 50px;
+      height: 50px;
+      -moz-border-radius: 120px;
+      -webkit-border-radius: 120px;
+      border-radius: 120px;
+      -moz-box-shadow: 0 2px 0 #00abf2 inset;
+      -webkit-box-shadow: 0 2px 0 #00abf2 inset;
+      box-shadow: 0 2px 0 #00abf2 inset;
+      animation: rotate-360 2s linear infinite;
+    }
+  }
+  @keyframes rotate-360 {
+    from {
+      -moz-transform: rotate(0);
+      -ms-transform: rotate(0);
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+    }
+    to {
+      -moz-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  position: relative;
   .avatar {
     width: 40px;
     height: 40px;
@@ -201,5 +237,13 @@
     border-radius: 50%;
     box-shadow: 0 1px 1px 0;
   }
+  .avatar-mask {
+    float: right;
+    margin-right: -45px;
+    margin-top: 6px;
+    width: 100px;
+    height: 100px;
+  }
+}
 
 </style>
