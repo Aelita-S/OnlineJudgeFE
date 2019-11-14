@@ -461,11 +461,9 @@
       },
       getTags () {
         api.getProblemTagList().then(res => {
-          let tagList = []
           for (let tag of res.data.data) {
-            tagList.push(tag.name)
+            this.tags.push(tag.name)
           }
-          this.tags = tagList
         }).catch(() => {
         })
       },

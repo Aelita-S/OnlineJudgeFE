@@ -1,7 +1,15 @@
 <template>
   <div id="header">
-    <Menu theme="light" mode="horizontal" @on-select="handleRoute" :active-name="activeMenu" class="oj-menu">
-      <div class="logo"><span>{{website.website_name}}</span></div>
+    <Menu
+      theme="light"
+      mode="horizontal"
+      @on-select="handleRoute"
+      :active-name="activeMenu"
+      class="oj-menu"
+    >
+      <div class="logo">
+        <span>{{website.website_name}}</span>
+      </div>
       <Menu-item name="/">
         <Icon type="home"></Icon>
         {{$t('m.Home')}}
@@ -18,53 +26,47 @@
         <Icon type="ios-pulse-strong"></Icon>
         {{$t('m.NavStatus')}}
       </Menu-item>
-      <Submenu name="rank">
-        <template slot="title">
-          <Icon type="podium"></Icon>
-          {{$t('m.Rank')}}
-        </template>
-        <Menu-item name="/acm-rank">
-          {{$t('m.ACM_Rank')}}
-        </Menu-item>
-        <Menu-item name="/oi-rank">
-          {{$t('m.OI_Rank')}}
-        </Menu-item>
-      </Submenu>
+
+      <Menu-item name="/acm-rank">
+        <Icon type="trophy"></Icon>
+        {{$t('m.ACM_Rank')}}
+      </Menu-item>
+
       <Submenu name="about">
         <template slot="title">
           <Icon type="information-circled"></Icon>
           {{$t('m.About')}}
         </template>
-        <Menu-item name="/about">
-          {{$t('m.Judger')}}
-        </Menu-item>
-        <Menu-item name="/FAQ">
-          {{$t('m.FAQ')}}
-        </Menu-item>
+        <Menu-item name="/about">{{$t('m.Judger')}}</Menu-item>
+        <Menu-item name="/FAQ">{{$t('m.FAQ')}}</Menu-item>
       </Submenu>
       <template v-if="!isAuthenticated">
         <div class="btn-menu">
-          <Button type="ghost"
-                  ref="loginBtn"
-                  shape="circle"
-                  @click="loginGetAvatat">{{$t('m.Login')}}
-          </Button>
-          <Button v-if="website.allow_register"
-                  type="ghost"
-                  shape="circle"
-                  @click="handleBtnClick('register')"
-                  style="margin-left: 5px;">{{$t('m.Register')}}
-          </Button>
+          <Button
+            type="ghost"
+            ref="loginBtn"
+            shape="circle"
+            @click="loginGetAvatat"
+          >{{$t('m.Login')}}</Button>
+          <Button
+            v-if="website.allow_register"
+            type="ghost"
+            shape="circle"
+            @click="handleBtnClick('register')"
+            style="margin-left: 5px;"
+          >{{$t('m.Register')}}</Button>
         </div>
       </template>
       <template v-else>
         <div class="avatar-container">
-          <a @click="goPerson"><img class="avatar" :src="avatar">
-            <div class="avatar-mask"/>
-          </img></a>
+          <a @click="goPerson">
+            <img class="avatar" :src="avatar" />
+            <div class="avatar-mask" />
+          </a>
         </div>
         <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
-          <Button type="text" class="drop-menu-title">{{ user.username }}
+          <Button type="text" class="drop-menu-title">
+            {{ user.username }}
             <Icon type="arrow-down-b"></Icon>
           </Button>
           <Dropdown-menu slot="list">
@@ -86,69 +88,69 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
-  import login from '@oj/views/user/Login'
-  import register from '@oj/views/user/Register'
-  import api from '@oj/api'
+import { mapGetters, mapActions } from 'vuex'
+import login from '@oj/views/user/Login'
+import register from '@oj/views/user/Register'
+import api from '@oj/api'
 
-  export default {
-    components: {
-      login,
-      register
+export default {
+  components: {
+    login,
+    register
+  },
+  data () {
+    return {
+      avatar: {}
+    }
+  },
+  mounted () {
+    this.getProfile()
+    this.getAvatar()
+  },
+  methods: {
+    ...mapActions(['getProfile', 'changeModalStatus']),
+    getAvatar () {
+      api.getUserInfo(this.user.username).then(res => {
+        this.avatar = res.data.data.avatar
+      })
     },
-    data () {
-      return {
-        avatar: {}
-      }
-    },
-    mounted () {
-      this.getProfile()
+    loginGetAvatat () {
+      this.handleBtnClick('login')
       this.getAvatar()
     },
-    methods: {
-      ...mapActions(['getProfile', 'changeModalStatus']),
-      getAvatar () {
-        api.getUserInfo(this.user.username).then(res => {
-          this.avatar = res.data.data.avatar
-        })
-      },
-      loginGetAvatat () {
-        this.handleBtnClick('login')
-        this.getAvatar()
-      },
-      handleRoute (route) {
-        if (route && route.indexOf('admin') < 0) {
-          this.$router.push(route)
-        } else {
-          window.location.assign('/admin/')
-        }
-      },
-      handleBtnClick (mode) {
-        this.changeModalStatus({
-          visible: true,
-          mode: mode
-        })
-      },
-      goPerson () {
-        this.$router.push('/user-home?username=' + this.user.username)
+    handleRoute (route) {
+      if (route && route.indexOf('admin') < 0) {
+        this.$router.push(route)
+      } else {
+        window.location.assign('/admin/')
       }
     },
-    computed: {
-      ...mapGetters(['website', 'modalStatus', 'user', 'isAuthenticated', 'isAdminRole']),
-      // 跟随路由变化
-      activeMenu () {
-        return '/' + this.$route.path.split('/')[1]
+    handleBtnClick (mode) {
+      this.changeModalStatus({
+        visible: true,
+        mode: mode
+      })
+    },
+    goPerson () {
+      this.$router.push('/user-home?username=' + this.user.username)
+    }
+  },
+  computed: {
+    ...mapGetters(['website', 'modalStatus', 'user', 'isAuthenticated', 'isAdminRole']),
+    // 跟随路由变化
+    activeMenu () {
+      return '/' + this.$route.path.split('/')[1]
+    },
+    modalVisible: {
+      get () {
+        return this.modalStatus.visible
       },
-      modalVisible: {
-        get () {
-          return this.modalStatus.visible
-        },
-        set (value) {
-          this.changeModalStatus({visible: value})
-        }
+      set (value) {
+        this.changeModalStatus({ visible: value })
       }
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
@@ -197,7 +199,6 @@
   }
 }
 
-
 .avatar-container {
   &:hover {
     .avatar-mask {
@@ -245,5 +246,4 @@
     height: 100px;
   }
 }
-
 </style>
