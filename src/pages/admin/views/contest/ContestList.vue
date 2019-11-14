@@ -97,7 +97,7 @@
                 :visible.sync="downloadDialogVisible">
       <el-switch v-model="excludeAdmin" active-text="Exclude admin submissions"></el-switch>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="downloadSubmissions">确 定</el-button>
+        <el-button type="primary" @click="downloadSubmissions">确定</el-button>
       </span>
     </el-dialog>
   </div>
