@@ -68,5 +68,5 @@ test.vue
 vendor-manifest.json
 vendor.dll*.js
 
-.bat
+*.bat
 yarn.lock
