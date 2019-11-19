@@ -4,7 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-*.bat
+
 # Runtime data
 pids
 *.pid
@@ -68,3 +68,5 @@ test.vue
 vendor-manifest.json
 vendor.dll*.js
 
+*.bat
+yarn.lock
