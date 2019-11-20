@@ -46,7 +46,7 @@
             type="ghost"
             ref="loginBtn"
             shape="circle"
-            @click="loginGetAvatat"
+            @click="handleBtnClick('login')"
           >{{$t('m.Login')}}</Button>
           <Button
             v-if="website.allow_register"
@@ -98,14 +98,8 @@ export default {
     login,
     register
   },
-  data () {
-    return {
-      avatar: {}
-    }
-  },
   mounted () {
     this.getProfile()
-    this.getAvatar()
   },
   methods: {
     ...mapActions(['getProfile', 'changeModalStatus']),
@@ -113,10 +107,6 @@ export default {
       api.getUserInfo(this.user.username).then(res => {
         this.avatar = res.data.data.avatar
       })
-    },
-    loginGetAvatat () {
-      this.handleBtnClick('login')
-      this.getAvatar()
     },
     handleRoute (route) {
       if (route && route.indexOf('admin') < 0) {
@@ -136,7 +126,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['website', 'modalStatus', 'user', 'isAuthenticated', 'isAdminRole']),
+    ...mapGetters(['website', 'modalStatus', 'user', 'avatar', 'isAuthenticated', 'isAdminRole']),
     // 跟随路由变化
     activeMenu () {
       return '/' + this.$route.path.split('/')[1]
