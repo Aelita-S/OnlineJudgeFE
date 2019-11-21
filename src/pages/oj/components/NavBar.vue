@@ -40,6 +40,7 @@
         <Menu-item name="/about">{{$t('m.Judger')}}</Menu-item>
         <Menu-item name="/FAQ">{{$t('m.FAQ')}}</Menu-item>
       </Submenu>
+      
       <template v-if="!isAuthenticated">
         <div class="btn-menu">
           <Button
@@ -58,25 +59,28 @@
         </div>
       </template>
       <template v-else>
-        <div class="avatar-container">
-          <a @click="goPerson">
-            <img class="avatar" :src="avatar" />
-            <div class="avatar-mask" />
-          </a>
+        <div style="float:right">
+          <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
+            <Button type="text" class="drop-menu-title">
+              {{ user.username }}
+              <Icon type="arrow-down-b"></Icon>
+            </Button>
+            <Dropdown-menu slot="list">
+              <Dropdown-item name="/user-home">{{$t('m.MyHome')}}</Dropdown-item>
+              <Dropdown-item name="/status?myself=1">{{$t('m.MySubmissions')}}</Dropdown-item>
+              <Dropdown-item name="/setting/profile">{{$t('m.Settings')}}</Dropdown-item>
+              <Dropdown-item v-if="isAdminRole" name="/admin">{{$t('m.Management')}}</Dropdown-item>
+              <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
+            </Dropdown-menu>
+          </Dropdown>
+          <div class="avatar-container">
+            <a @click="goPerson">
+              <img class="avatar" :src="avatar" />
+              <div class="avatar-mask" />
+            </a>
+          </div>
+
         </div>
-        <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
-          <Button type="text" class="drop-menu-title">
-            {{ user.username }}
-            <Icon type="arrow-down-b"></Icon>
-          </Button>
-          <Dropdown-menu slot="list">
-            <Dropdown-item name="/user-home">{{$t('m.MyHome')}}</Dropdown-item>
-            <Dropdown-item name="/status?myself=1">{{$t('m.MySubmissions')}}</Dropdown-item>
-            <Dropdown-item name="/setting/profile">{{$t('m.Settings')}}</Dropdown-item>
-            <Dropdown-item v-if="isAdminRole" name="/admin">{{$t('m.Management')}}</Dropdown-item>
-            <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
-          </Dropdown-menu>
-        </Dropdown>
       </template>
     </Menu>
     <Modal v-model="modalVisible" :width="400">
@@ -145,7 +149,7 @@ export default {
 
 <style lang="less" scoped>
 #header {
-  min-width: 1100px;
+  min-width: 890px;
   position: fixed;
   top: 0;
   left: 0;
