@@ -39,6 +39,17 @@
             </Button>
           </li>
 
+          <li>
+            <Button v-if='fromOldToNew' type="warning" v-on:click='changeOldtoNew'>
+              <Icon class="el-icon-sort-down"></Icon>
+              问题从旧到新
+            </Button>
+            <Button v-else-if='!fromOldToNew' type="success" v-on:click="changeOldtoNew">
+              <Icon class="el-icon-sort-up"></Icon>
+              问题从新到旧
+            </Button>
+          </li>
+
         </ul>
       </div>
       <Table style="width: 100%; font-size: 16px;"
@@ -98,6 +109,7 @@
     },
     data () {
       return {
+        fromOldToNew: true,
         tagList: [],
         problemTableColumns: [
           {
@@ -213,14 +225,22 @@
       },
       getProblemList () {
         let offset = (this.query.page - 1) * this.limit
+        offset = !this.fromOldToNew ? this.total - offset - this.limit : offset
+        var limit = offset >= 0 ? this.limit : offset + this.limit
         this.loadings.table = true
-        api.getProblemList(offset, this.limit, this.query).then(res => {
+        api.getProblemList(offset, limit, this.query).then(res => {
+          var list = res.data.data.results
           this.loadings.table = false
           this.total = res.data.data.total
-          this.problemList = res.data.data.results
           if (this.isAuthenticated) {
             this.addStatusColumn(this.problemTableColumns, res.data.data.results)
           }
+          if (!this.fromOldToNew) {
+            list.sort((problem1, problem2) => {
+              return -((new Date(problem1.create_time)).getTime() - (new Date(problem2.create_time)).getTime())
+            })
+          }
+          this.problemList = list
         }, res => {
           this.loadings.table = false
         })
@@ -287,6 +307,10 @@
           this.$success('Good Luck')
           this.$router.push({name: 'problem-details', params: {problemID: res.data.data}})
         })
+      },
+      changeOldtoNew () {
+        this.fromOldToNew = !this.fromOldToNew
+        this.getProblemList()
       }
     },
     computed: {
