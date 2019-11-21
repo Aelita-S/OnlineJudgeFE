@@ -40,11 +40,11 @@
           </li>
 
           <li>
-            <Button v-if='fromOldToNew' type="warning" v-on:click='changeOldtoNew'>
+            <Button v-if='isReserved' type="warning" v-on:click='changeOldtoNew'>
               <Icon class="el-icon-sort-down"></Icon>
               问题从旧到新
             </Button>
-            <Button v-else-if='!fromOldToNew' type="success" v-on:click="changeOldtoNew">
+            <Button v-else-if='!isReserved' type="success" v-on:click="changeOldtoNew">
               <Icon class="el-icon-sort-up"></Icon>
               问题从新到旧
             </Button>
@@ -109,7 +109,7 @@
     },
     data () {
       return {
-        fromOldToNew: true,
+        isReserved: false,
         tagList: [],
         problemTableColumns: [
           {
@@ -225,22 +225,15 @@
       },
       getProblemList () {
         let offset = (this.query.page - 1) * this.limit
-        offset = !this.fromOldToNew ? this.total - offset - this.limit : offset
-        var limit = offset >= 0 ? this.limit : offset + this.limit
         this.loadings.table = true
-        api.getProblemList(offset, limit, this.query).then(res => {
-          var list = res.data.data.results
+  
+        api.getProblemList(offset, this.limit, this.isReserved, this.query).then(res => {
+          this.problemList = res.data.data.results
           this.loadings.table = false
           this.total = res.data.data.total
           if (this.isAuthenticated) {
             this.addStatusColumn(this.problemTableColumns, res.data.data.results)
           }
-          if (!this.fromOldToNew) {
-            list.sort((problem1, problem2) => {
-              return -((new Date(problem1.create_time)).getTime() - (new Date(problem2.create_time)).getTime())
-            })
-          }
-          this.problemList = list
         }, res => {
           this.loadings.table = false
         })
@@ -309,7 +302,7 @@
         })
       },
       changeOldtoNew () {
-        this.fromOldToNew = !this.fromOldToNew
+        this.isReserved = !this.isReserved
         this.getProblemList()
       }
     },
