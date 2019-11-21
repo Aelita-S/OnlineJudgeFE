@@ -149,7 +149,7 @@ export default {
 
 <style lang="less" scoped>
 #header {
-  min-width: 890px;
+  min-width: 930px;
   position: fixed;
   top: 0;
   left: 0;
