@@ -40,11 +40,11 @@
           </li>
 
           <li>
-            <Button v-if='isReserved' type="warning" v-on:click='changeOldtoNew'>
+            <Button v-if='!isReserved' type="warning" v-on:click='changeOldtoNew'>
               <Icon class="el-icon-sort-down"></Icon>
               问题从旧到新
             </Button>
-            <Button v-else-if='!isReserved' type="success" v-on:click="changeOldtoNew">
+            <Button v-else-if='isReserved' type="success" v-on:click="changeOldtoNew">
               <Icon class="el-icon-sort-up"></Icon>
               问题从新到旧
             </Button>
