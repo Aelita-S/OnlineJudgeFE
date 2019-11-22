@@ -64,7 +64,7 @@
 
     <Col :span="5">
     <Panel :padding="10">
-      <div slot="title" class="taglist-title">标签</div>
+      <div slot="title" class="taglist-title">{{$t('m.Tags')}}</div>
       <template v-for="tag in tagList">
       <Button v-if="query.tag===tag.name"
               :key="tag.name"
@@ -84,9 +84,9 @@
               <Font color="black" v-else>{{tag.name}}</Font>
       </Button>
       </template>
-      <Button long id="pick-one" @click="pickone">
-        <Icon type="shuffle"></Icon>
-        {{$t('m.Pick_One')}}
+      <Button long id="pick-one" @click="onReset">
+        <Icon type="refresh"></Icon>
+        重置标签
       </Button>
     </Panel>
     <Spin v-if="loadings.tag" fix size="large"></Spin>
