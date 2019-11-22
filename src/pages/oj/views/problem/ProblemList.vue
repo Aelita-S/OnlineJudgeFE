@@ -2,26 +2,26 @@
   <Row type="flex" :gutter="18">
     <Col :span=19>
     <Panel shadow>
-      <div slot="title">问题列表</div>
+      <div slot="title">{{$t('m.Problem_List')}}</div>
       <div slot="extra">
         <ul class="filter">
           <li>
             <Dropdown @on-click="filterByDifficulty">
-              <span>{{query.difficulty === '' ? '难度' : query.difficulty === 'Low' ? '简单' : query.difficulty === 'Mid' ? '中等' : '困难'}}
+              <span>{{query.difficulty === '' ? this.$i18n.t('m.Difficulty') : this.$i18n.t('m.' + query.difficulty)}}
                 <Icon type="arrow-down-b"></Icon>
               </span>
               <Dropdown-menu slot="list">
-                <Dropdown-item name="">全部</Dropdown-item>
-                <Dropdown-item name="Low">简单</Dropdown-item>
-                <Dropdown-item name="Mid">中等</Dropdown-item>
-                <Dropdown-item name="High">困难</Dropdown-item>
+                <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
+                <Dropdown-item name="Low">{{$t('m.Low')}}</Dropdown-item>
+                <Dropdown-item name="Mid" >{{$t('m.Mid')}}</Dropdown-item>
+                <Dropdown-item name="High">{{$t('m.High')}}</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
           </li>
           <li>
             <i-switch size="large" @on-change="handleTagsVisible">
-              <span slot="open">标签</span>
-              <span slot="close">标签</span>
+              <span slot="open">{{$t('m.Tags')}}</span>
+              <span slot="close">{{$t('m.Tags')}}</span>
             </i-switch>
           </li>
           <li>
@@ -33,9 +33,9 @@
           </li>
 
           <li>
-            <Button type="info" @click="pickone">
-              <Icon type="shuffle"></Icon>
-              随机选题
+            <Button type="info" @click="onReset">
+              <Icon type="refresh"></Icon>
+              {{$t('m.Reset')}}
             </Button>
           </li>
 
@@ -64,7 +64,7 @@
 
     <Col :span="5">
     <Panel :padding="10">
-      <div slot="title" class="taglist-title">标签</div>
+      <div slot="title" class="taglist-title">{{$t('m.Tags')}}</div>
       <template v-for="tag in tagList">
       <Button v-if="query.tag===tag.name"
               :key="tag.name"
@@ -84,9 +84,9 @@
               <Font color="black" v-else>{{tag.name}}</Font>
       </Button>
       </template>
-      <Button long id="pick-one" @click="onReset">
-        <Icon type="refresh"></Icon>
-        重置标签
+      <Button long id="pick-one" @click="pickone">
+        <Icon type="shuffle"></Icon>
+        {{$t('m.Pick_One')}}
       </Button>
     </Panel>
     <Spin v-if="loadings.tag" fix size="large"></Spin>
@@ -134,7 +134,7 @@
             }
           },
           {
-            title: '标题',
+            title: this.$i18n.t('m.Title'),
             width: 400,
             render: (h, params) => {
               return h('Button', {
@@ -157,7 +157,7 @@
             }
           },
           {
-            title: '难度',
+            title: this.$i18n.t('m.Level'),
             render: (h, params) => {
               let t = params.row.difficulty
               let color = 'orange'
@@ -167,15 +167,15 @@
                 props: {
                   color: color
                 }
-              }, params.row.difficulty)
+              }, this.$i18n.t('m.' + params.row.difficulty))
             }
           },
           {
-            title: '提交数',
+            title: this.$i18n.t('m.Total'),
             key: 'submission_number'
           },
           {
-            title: '正确率',
+            title: this.$i18n.t('m.AC_Rate'),
             render: (h, params) => {
               return h('span', this.getACRate(params.row.accepted_number, params.row.submission_number))
             }
@@ -271,7 +271,7 @@
         if (value) {
           this.problemTableColumns.push(
             {
-              title: '标签',
+              title: this.$i18n.t('m.Tags'),
               align: 'center',
               render: (h, params) => {
                 let tags = []

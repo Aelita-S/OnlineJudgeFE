@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <el-dialog title="Latex Editor" :visible.sync="katexVisible">
+    <el-dialog :title="$t('m.Latex_Editor')" :visible.sync="katexVisible">
       <KatexEditor></KatexEditor>
     </el-dialog>
   </div>
@@ -147,13 +147,7 @@
     margin-right: 5px;
     /*font-size: 18px;*/
   }
-  .bt {
-    margin-left: 2%;
-    margin-right: 2%;
-    margin-top: 0.5%;
-    float: left;
-    
-  }
+
 
 
 </style>
