@@ -39,6 +39,17 @@
             </Button>
           </li>
 
+          <li>
+            <Button v-if='isReserved' type="warning" v-on:click='changeOldtoNew'>
+              <Icon class="el-icon-sort-down"></Icon>
+              问题从旧到新
+            </Button>
+            <Button v-else-if='!isReserved' type="success" v-on:click="changeOldtoNew">
+              <Icon class="el-icon-sort-up"></Icon>
+              问题从新到旧
+            </Button>
+          </li>
+
         </ul>
       </div>
       <Table style="width: 100%; font-size: 16px;"
@@ -98,6 +109,7 @@
     },
     data () {
       return {
+        isReserved: false,
         tagList: [],
         problemTableColumns: [
           {
@@ -214,10 +226,11 @@
       getProblemList () {
         let offset = (this.query.page - 1) * this.limit
         this.loadings.table = true
-        api.getProblemList(offset, this.limit, this.query).then(res => {
+  
+        api.getProblemList(offset, this.limit, this.isReserved, this.query).then(res => {
+          this.problemList = res.data.data.results
           this.loadings.table = false
           this.total = res.data.data.total
-          this.problemList = res.data.data.results
           if (this.isAuthenticated) {
             this.addStatusColumn(this.problemTableColumns, res.data.data.results)
           }
@@ -287,6 +300,10 @@
           this.$success('Good Luck')
           this.$router.push({name: 'problem-details', params: {problemID: res.data.data}})
         })
+      },
+      changeOldtoNew () {
+        this.isReserved = !this.isReserved
+        this.getProblemList()
       }
     },
     computed: {

@@ -108,11 +108,12 @@ export default {
   getProblemTagList () {
     return ajax('problem/tags', 'get')
   },
-  getProblemList (offset, limit, searchParams) {
+  getProblemList (offset, limit, isReserved, searchParams) {
     let params = {
       paging: true,
       offset,
-      limit
+      limit,
+      isReserved
     }
     Object.keys(searchParams).forEach((element) => {
       if (searchParams[element]) {

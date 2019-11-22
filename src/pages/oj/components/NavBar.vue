@@ -40,13 +40,14 @@
         <Menu-item name="/about">{{$t('m.Judger')}}</Menu-item>
         <Menu-item name="/FAQ">{{$t('m.FAQ')}}</Menu-item>
       </Submenu>
+      
       <template v-if="!isAuthenticated">
         <div class="btn-menu">
           <Button
             type="ghost"
             ref="loginBtn"
             shape="circle"
-            @click="loginGetAvatat"
+            @click="handleBtnClick('login')"
           >{{$t('m.Login')}}</Button>
           <Button
             v-if="website.allow_register"
@@ -58,25 +59,28 @@
         </div>
       </template>
       <template v-else>
-        <div class="avatar-container">
-          <a @click="goPerson">
-            <img class="avatar" :src="avatar" />
-            <div class="avatar-mask" />
-          </a>
+        <div style="float:right">
+          <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
+            <Button type="text" class="drop-menu-title">
+              {{ user.username }}
+              <Icon type="arrow-down-b"></Icon>
+            </Button>
+            <Dropdown-menu slot="list">
+              <Dropdown-item name="/user-home">{{$t('m.MyHome')}}</Dropdown-item>
+              <Dropdown-item name="/status?myself=1">{{$t('m.MySubmissions')}}</Dropdown-item>
+              <Dropdown-item name="/setting/profile">{{$t('m.Settings')}}</Dropdown-item>
+              <Dropdown-item v-if="isAdminRole" name="/admin">{{$t('m.Management')}}</Dropdown-item>
+              <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
+            </Dropdown-menu>
+          </Dropdown>
+          <div class="avatar-container">
+            <a @click="goPerson">
+              <img class="avatar" :src="avatar" />
+              <div class="avatar-mask" />
+            </a>
+          </div>
+
         </div>
-        <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
-          <Button type="text" class="drop-menu-title">
-            {{ user.username }}
-            <Icon type="arrow-down-b"></Icon>
-          </Button>
-          <Dropdown-menu slot="list">
-            <Dropdown-item name="/user-home">{{$t('m.MyHome')}}</Dropdown-item>
-            <Dropdown-item name="/status?myself=1">{{$t('m.MySubmissions')}}</Dropdown-item>
-            <Dropdown-item name="/setting/profile">{{$t('m.Settings')}}</Dropdown-item>
-            <Dropdown-item v-if="isAdminRole" name="/admin">{{$t('m.Management')}}</Dropdown-item>
-            <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
-          </Dropdown-menu>
-        </Dropdown>
       </template>
     </Menu>
     <Modal v-model="modalVisible" :width="400">
@@ -98,14 +102,8 @@ export default {
     login,
     register
   },
-  data () {
-    return {
-      avatar: {}
-    }
-  },
   mounted () {
     this.getProfile()
-    this.getAvatar()
   },
   methods: {
     ...mapActions(['getProfile', 'changeModalStatus']),
@@ -113,10 +111,6 @@ export default {
       api.getUserInfo(this.user.username).then(res => {
         this.avatar = res.data.data.avatar
       })
-    },
-    loginGetAvatat () {
-      this.handleBtnClick('login')
-      this.getAvatar()
     },
     handleRoute (route) {
       if (route && route.indexOf('admin') < 0) {
@@ -136,7 +130,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['website', 'modalStatus', 'user', 'isAuthenticated', 'isAdminRole']),
+    ...mapGetters(['website', 'modalStatus', 'user', 'avatar', 'isAuthenticated', 'isAdminRole']),
     // 跟随路由变化
     activeMenu () {
       return '/' + this.$route.path.split('/')[1]
@@ -155,7 +149,7 @@ export default {
 
 <style lang="less" scoped>
 #header {
-  min-width: 1100px;
+  min-width: 930px;
   position: fixed;
   top: 0;
   left: 0;
@@ -242,8 +236,6 @@ export default {
     float: right;
     margin-right: -45px;
     margin-top: 6px;
-    width: 100px;
-    height: 100px;
   }
 }
 </style>

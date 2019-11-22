@@ -10,6 +10,7 @@ const state = {
 
 const getters = {
   user: state => state.profile.user || {},
+  avatar: state => state.profile.avatar,
   profile: state => state.profile,
   isAuthenticated: (state, getters) => {
     return !!getters.user.id
