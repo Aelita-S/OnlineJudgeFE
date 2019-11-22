@@ -177,7 +177,24 @@
           {
             title: this.$i18n.t('m.AC_Rate'),
             render: (h, params) => {
-              return h('span', this.getACRate(params.row.accepted_number, params.row.submission_number))
+              let acRate = (params.row.accepted_number / params.row.submission_number * 100).toFixed(1)
+              let status
+              if (acRate > 45) {
+                status = 'success'
+              } else if (acRate > 25) {
+                status = 'warning'
+              } else {
+                status = 'exception'
+              }
+              return h('el-progress', {
+                props: {
+                  'text-inside': 'true',
+                  'stroke-width': 24,
+                  'percentage': acRate,
+                  status: status
+                }
+              }
+            , params.row)
             }
           }
         ],
