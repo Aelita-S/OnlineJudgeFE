@@ -26,16 +26,10 @@
         <Icon type="ios-pulse-strong"></Icon>
         {{$t('m.NavStatus')}}
       </Menu-item>
-      <Submenu name="rank">
-        <template slot="title">
-          <Icon type="podium"></Icon>
-          {{$t('m.Rank')}}
-        </template>
       <Menu-item name="/acm-rank">
         <Icon type="trophy"></Icon>
         {{$t('m.ACM_Rank')}}
       </Menu-item>
-      </Submenu>
 
       <Submenu name="about">
         <template slot="title">
