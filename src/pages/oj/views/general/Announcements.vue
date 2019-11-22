@@ -32,8 +32,8 @@
                   {{announcement.title}}
                 </font>
               </a></div>
-              <div class="date"style="font-size:12px">{{announcement.create_time}}发布</div>
-              <div class="date"style="font-size:12px">{{announcement.last_update_time}}更新</div>
+              <div class="date" style="text-align : left;">{{announcement.create_time}}发布</div>
+              <div class="date" style="text-align : left;">{{announcement.last_update_time}}更新</div>
               <div class="creator"> By {{announcement.created_by.username}}</div>
             </div>
           </li>
