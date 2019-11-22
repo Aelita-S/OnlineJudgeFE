@@ -32,8 +32,8 @@
                   {{announcement.title}}
                 </font>
               </a></div>
-              <div class="date">{{announcement.create_time | localtime}}</div>
-              <div class="date">{{announcement.last_update_time | localtime}}</div>
+              <div class="date"style="font-size:12px">{{announcement.create_time}}发布</div>
+              <div class="date"style="font-size:12px">{{announcement.last_update_time}}更新</div>
               <div class="creator"> By {{announcement.created_by.username}}</div>
             </div>
           </li>
@@ -109,6 +109,8 @@
       sortList (arr) {
         let list = []
         for (let i = 0; i < arr.length; i++) {
+          arr[i].create_time = getAItime(arr[i].create_time)
+          arr[i].last_update_time = getAItime(arr[i].last_update_time)
           if (arr[i].istop) {
             list.push(arr[i])
           }
@@ -142,6 +144,27 @@
       }
     }
   }
+function getAItime (time) {
+    var result
+    var ttime
+    ttime = new Date(time).toJSON()
+    ttime = new Date(+new Date(ttime) + 28800000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ' ').replace(/-/gi, '/')
+    ttime = Date.parse(ttime)
+    var now = new Date().getTime()
+    var d = now - ttime
+    var monthC = d / 2592000000
+    var weekC = d / 604800000
+    var dayC = d / 86400000
+    var hourC = d / 3600000
+    var minC = d / 60000
+    if (monthC >= 1) result = parseInt(monthC) + '个月前'
+    else if (weekC >= 1) result = parseInt(weekC) + '周前'
+    else if (dayC >= 1) result = parseInt(dayC) + '天前'
+    else if (hourC >= 1) result = parseInt(hourC) + '小时前'
+    else if (minC >= 1) result = parseInt(minC) + '分钟前'
+    else result = '刚刚'
+    return result
+}
 </script>
 
 <style scoped lang="less">
