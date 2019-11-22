@@ -1,7 +1,15 @@
 <template>
   <div id="header">
-    <Menu theme="light" mode="horizontal" @on-select="handleRoute" :active-name="activeMenu" class="oj-menu">
-      <div class="logo"><span>{{website.website_name}}</span></div>
+    <Menu
+      theme="light"
+      mode="horizontal"
+      @on-select="handleRoute"
+      :active-name="activeMenu"
+      class="oj-menu"
+    >
+      <div class="logo">
+        <span>{{website.website_name}}</span>
+      </div>
       <Menu-item name="/">
         <Icon type="home"></Icon>
         {{$t('m.Home')}}
@@ -18,48 +26,47 @@
         <Icon type="ios-pulse-strong"></Icon>
         {{$t('m.NavStatus')}}
       </Menu-item>
-      <Submenu name="rank">
-        <template slot="title">
-          <Icon type="podium"></Icon>
-          {{$t('m.Rank')}}
-        </template>
-        <Menu-item name="/acm-rank">
-          {{$t('m.ACM_Rank')}}
-        </Menu-item>
-        <Menu-item name="/oi-rank">
-          {{$t('m.OI_Rank')}}
-        </Menu-item>
-      </Submenu>
+
+      <Menu-item name="/acm-rank">
+        <Icon type="trophy"></Icon>
+        {{$t('m.ACM_Rank')}}
+      </Menu-item>
+
       <Submenu name="about">
         <template slot="title">
           <Icon type="information-circled"></Icon>
           {{$t('m.About')}}
         </template>
-        <Menu-item name="/about">
-          {{$t('m.Judger')}}
-        </Menu-item>
-        <Menu-item name="/FAQ">
-          {{$t('m.FAQ')}}
-        </Menu-item>
+        <Menu-item name="/about">{{$t('m.Judger')}}</Menu-item>
+        <Menu-item name="/FAQ">{{$t('m.FAQ')}}</Menu-item>
       </Submenu>
       <template v-if="!isAuthenticated">
         <div class="btn-menu">
-          <Button type="ghost"
-                  ref="loginBtn"
-                  shape="circle"
-                  @click="handleBtnClick('login')">{{$t('m.Login')}}
-          </Button>
-          <Button v-if="website.allow_register"
-                  type="ghost"
-                  shape="circle"
-                  @click="handleBtnClick('register')"
-                  style="margin-left: 5px;">{{$t('m.Register')}}
-          </Button>
+          <Button
+            type="ghost"
+            ref="loginBtn"
+            shape="circle"
+            @click="loginGetAvatat"
+          >{{$t('m.Login')}}</Button>
+          <Button
+            v-if="website.allow_register"
+            type="ghost"
+            shape="circle"
+            @click="handleBtnClick('register')"
+            style="margin-left: 5px;"
+          >{{$t('m.Register')}}</Button>
         </div>
       </template>
       <template v-else>
+        <div class="avatar-container">
+          <a @click="goPerson">
+            <img class="avatar" :src="avatar" />
+            <div class="avatar-mask" />
+          </a>
+        </div>
         <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
-          <Button type="text" class="drop-menu-title">{{ user.username }}
+          <Button type="text" class="drop-menu-title">
+            {{ user.username }}
             <Icon type="arrow-down-b"></Icon>
           </Button>
           <Dropdown-menu slot="list">
@@ -81,95 +88,162 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
-  import login from '@oj/views/user/Login'
-  import register from '@oj/views/user/Register'
+import { mapGetters, mapActions } from 'vuex'
+import login from '@oj/views/user/Login'
+import register from '@oj/views/user/Register'
+import api from '@oj/api'
 
-  export default {
-    components: {
-      login,
-      register
+export default {
+  components: {
+    login,
+    register
+  },
+  data () {
+    return {
+      avatar: {}
+    }
+  },
+  mounted () {
+    this.getProfile()
+    this.getAvatar()
+  },
+  methods: {
+    ...mapActions(['getProfile', 'changeModalStatus']),
+    getAvatar () {
+      api.getUserInfo(this.user.username).then(res => {
+        this.avatar = res.data.data.avatar
+      })
     },
-    mounted () {
-      this.getProfile()
+    loginGetAvatat () {
+      this.handleBtnClick('login')
+      this.getAvatar()
     },
-    methods: {
-      ...mapActions(['getProfile', 'changeModalStatus']),
-      handleRoute (route) {
-        if (route && route.indexOf('admin') < 0) {
-          this.$router.push(route)
-        } else {
-          window.open('/admin/')
-        }
-      },
-      handleBtnClick (mode) {
-        this.changeModalStatus({
-          visible: true,
-          mode: mode
-        })
+    handleRoute (route) {
+      if (route && route.indexOf('admin') < 0) {
+        this.$router.push(route)
+      } else {
+        window.location.assign('/admin/')
       }
     },
-    computed: {
-      ...mapGetters(['website', 'modalStatus', 'user', 'isAuthenticated', 'isAdminRole']),
-      // 跟随路由变化
-      activeMenu () {
-        return '/' + this.$route.path.split('/')[1]
+    handleBtnClick (mode) {
+      this.changeModalStatus({
+        visible: true,
+        mode: mode
+      })
+    },
+    goPerson () {
+      this.$router.push('/user-home?username=' + this.user.username)
+    }
+  },
+  computed: {
+    ...mapGetters(['website', 'modalStatus', 'user', 'isAuthenticated', 'isAdminRole']),
+    // 跟随路由变化
+    activeMenu () {
+      return '/' + this.$route.path.split('/')[1]
+    },
+    modalVisible: {
+      get () {
+        return this.modalStatus.visible
       },
-      modalVisible: {
-        get () {
-          return this.modalStatus.visible
-        },
-        set (value) {
-          this.changeModalStatus({visible: value})
-        }
+      set (value) {
+        this.changeModalStatus({ visible: value })
       }
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
-  #header {
-    min-width: 1100px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 60px;
-    width: 100%;
-    z-index: 1000;
-    background-color: #fff;
-    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
-    .oj-menu {
-      background: #fdfdfd;
-    }
-
-    .logo {
-      margin-left: 2%;
-      margin-right: 2%;
-      font-size: 20px;
-      float: left;
-      line-height: 60px;
-    }
-
-    .drop-menu {
-      float: right;
-      margin-right: 30px;
-      position: absolute;
-      right: 10px;
-      &-title {
-        font-size: 18px;
-      }
-    }
-    .btn-menu {
-      font-size: 16px;
-      float: right;
-      margin-right: 10px;
-    }
+#header {
+  min-width: 1100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  z-index: 1000;
+  background-color: #fff;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  .oj-menu {
+    background: #fdfdfd;
   }
 
-  .modal {
+  .logo {
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 20px;
+    float: left;
+    line-height: 60px;
+  }
+
+  .drop-menu {
+    float: right;
+    margin-right: 30px;
+    position: absolute;
+    right: 25px;
     &-title {
       font-size: 18px;
-      font-weight: 600;
     }
   }
+  .btn-menu {
+    font-size: 16px;
+    float: right;
+    margin-right: 10px;
+  }
+}
+
+.modal {
+  &-title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.avatar-container {
+  &:hover {
+    .avatar-mask {
+      width: 50px;
+      height: 50px;
+      -moz-border-radius: 120px;
+      -webkit-border-radius: 120px;
+      border-radius: 120px;
+      -moz-box-shadow: 0 2px 0 #00abf2 inset;
+      -webkit-box-shadow: 0 2px 0 #00abf2 inset;
+      box-shadow: 0 2px 0 #00abf2 inset;
+      animation: rotate-360 2s linear infinite;
+    }
+  }
+  @keyframes rotate-360 {
+    from {
+      -moz-transform: rotate(0);
+      -ms-transform: rotate(0);
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+    }
+    to {
+      -moz-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  position: relative;
+  .avatar {
+    width: 40px;
+    height: 40px;
+    float: right;
+    margin-right: 13px;
+    margin-top: 10px;
+    border-radius: 50%;
+    box-shadow: 0 1px 1px 0;
+  }
+  .avatar-mask {
+    float: right;
+    margin-right: -45px;
+    margin-top: 6px;
+    width: 100px;
+    height: 100px;
+  }
+}
 </style>

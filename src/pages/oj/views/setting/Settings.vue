@@ -5,16 +5,19 @@
         <div class="menu">
           <Menu accordion @on-select="goRoute" :activeName="activeName" style="text-align: center;" width="auto">
             <div class="avatar-editor">
-              <div class="avatar-container">
-                <img class="avatar" :src="profile.avatar"/>
-                <div class="avatar-mask">
-                  <a @click.stop="goRoute({name: 'profile-setting'})">
+              <div class="avatar-container"> 
+                <img class="avatar" :src="profile.avatar">
+                  <div class="avatar-mask"/>
+                </img>
+                <!-- <div class="avatar-mask"> -->
+                  <!-- <a @click.stop="goRoute({name: 'profile-setting'})">
                     <div class="mask-content">
                       <Icon type="camera" size="30"></Icon>
                       <p class="text">change avatar</p>
                     </div>
-                  </a>
-                </div>
+                  </a> -->
+                <!-- </div>  -->
+                
               </div>
             </div>
 
@@ -70,9 +73,33 @@
         .avatar-container {
           &:hover {
             .avatar-mask {
-              opacity: .5;
+              opacity: .8;
+              width: 150px;
+              height: 150px;
+              -moz-border-radius: 150px;
+              -webkit-border-radius: 150px;
+              border-radius: 150px;
+              -moz-box-shadow: 0 4px 0 #00abf2 inset;
+              -webkit-box-shadow: 0 4px 0 #00abf2 inset;
+              box-shadow: 0 4px 0 #00abf2 inset;
+              animation: rotate-360 2s linear infinite;
             }
           }
+          @keyframes rotate-360 {
+            from {
+              -moz-transform: rotate(0);
+              -ms-transform: rotate(0);
+              -webkit-transform: rotate(0);
+              transform: rotate(0);
+            }
+            to {
+              -moz-transform: rotate(360deg);
+              -ms-transform: rotate(360deg);
+              -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
+            }
+          }
+
           position: relative;
           .avatar {
             width: 100%;
@@ -83,29 +110,12 @@
             box-shadow: 0px 0px 1px 0px;
           }
           .avatar-mask {
-            transition: opacity .2s ease-in;
-            z-index: 1;
-            border-radius: @avatar-radius;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: black;
-            opacity: 0;
-            .mask-content {
               position: absolute;
               top: 50%;
               left: 50%;
-              z-index: 3;
-              color: #fff;
-              font-size: 16px;
-              text-align: center;
-              transform: translate(-50%, -50%);
-              .text {
-                white-space: nowrap;
-              }
-            }
+              margin: -75px 0px 0px -75px;
+              width: 120px;
+              height: 120px;
           }
         }
       }

@@ -2,7 +2,7 @@
   <el-menu class="vertical_menu"
            :router="true" :default-active="currentPath">
     <div class="logo">
-      <img src="../../../assets/logo.svg" alt="oj admin"/>
+      <a @click="gohome"><img src="../../../assets/logo.svg" alt="oj admin"/></a>
     </div>
     <el-menu-item index="/"><i class="el-icon-fa-dashboard"></i>{{$t('m.Dashboard')}}</el-menu-item>
     <el-submenu v-if="isSuperAdmin" index="general">
@@ -40,6 +40,11 @@
     },
     mounted () {
       this.currentPath = this.$route.path
+    },
+    methods: {
+      gohome () {
+        window.location.assign('/')
+      }
     },
     computed: {
       ...mapGetters(['user', 'isSuperAdmin', 'hasProblemPermission'])

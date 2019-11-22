@@ -54,24 +54,25 @@
     <Col :span="5">
     <Panel :padding="10">
       <div slot="title" class="taglist-title">标签</div>
-      <Button v-for="tag in tagList"
+      <template v-for="tag in tagList">
+      <Button v-if="query.tag===tag.name"
               :key="tag.name"
-              @click="disableTag(tag.name)"
-              type="ghost"
+              @click="disableTag(tag)"
+              type="info"
               shape="circle"
-              class="tag-btn">{{tag.name}}
+              class="tag-btn">
+              <Font color="white" v-if="tag.name == query.tag">{{tag.name}}</Font>
       </Button>
-      <template v-if="isDisabled">
-      <Button v-for="tag in disabledTagList"
+      <Button v-else
               :key="tag.name"
-              @click="cancelTag(tag)"
+              @click="disableTag(tag)"
               type="ghost"
-              style="background:Gray"
               shape="circle"
-              class="tag-btn"><Font color="white">{{tag.name}}</Font>
+              class="tag-btn">
+              <Font color="red" v-if="tag.name == query.tag">{{tag.name}}</Font>
+              <Font color="black" v-else>{{tag.name}}</Font>
       </Button>
       </template>
-
       <Button long id="pick-one" @click="onReset">
         <Icon type="refresh"></Icon>
         重置标签
@@ -98,8 +99,6 @@
     data () {
       return {
         tagList: [],
-        disabledTagList: [],
-        isDisabled: false,
         problemTableColumns: [
           {
             title: 'ID',
@@ -205,9 +204,6 @@
           this.getTagList()
         }
         this.getProblemList()
-        if (this.query.tag !== '') {
-          this.disableTag(this.query.tag)
-        }
       },
       pushRouter () {
         this.$router.push({
@@ -229,25 +225,12 @@
           this.loadings.table = false
         })
       },
-      cancelTag (tag) {
-        this.disabledTagList = []
-        this.tagList.push(tag)
-        this.isDisabled = false
-        this.$router.push({name: 'problem-list'})
-      },
-      disableTag (name) {
-        for (let i = 0; i < this.disabledTagList.length; i++) {
-          this.tagList.push(this.disabledTagList[i])
+      disableTag (tag) {
+        if (this.query.tag === tag.name) {
+          this.$router.push({name: 'problem-list'})
+        } else {
+          this.filterByTag(tag.name)
         }
-        this.disabledTagList = []
-        for (let i = 0; i < this.tagList.length; i++) {
-          if (this.tagList[i].name === name) {
-            this.disabledTagList.push(this.tagList[i])
-            this.tagList.splice(i, 1)
-            this.isDisabled = true
-          }
-        }
-        this.filterByTag(name)
       },
       getTagList () {
         api.getProblemTagList().then(res => {

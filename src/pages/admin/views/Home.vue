@@ -147,7 +147,13 @@
     margin-right: 5px;
     /*font-size: 18px;*/
   }
-
+  .bt {
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 0.5%;
+    float: left;
+    
+  }
 
 
 </style>
