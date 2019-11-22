@@ -1,59 +1,59 @@
 export const JUDGE_STATUS = {
   '-2': {
-    name: '编译错误 / CE',
+    name: 'Compile Error',
     short: 'CE',
-    color: 'black',
+    color: 'yellow',
     type: 'warning'
   },
   '-1': {
-    name: '答案错误 / WA',
+    name: 'Wrong Answer',
     short: 'WA',
     color: 'red',
     type: 'error'
   },
   '0': {
-    name: '答案正确 / AC',
+    name: 'Accepted',
     short: 'AC',
     color: 'green',
     type: 'success'
   },
   '1': {
-    name: '时间超限 / TLE',
+    name: 'Time Limit Exceeded',
     short: 'TLE',
     color: 'red',
     type: 'error'
   },
   '2': {
-    name: '时间超限 / TLE',
+    name: 'Time Limit Exceeded',
     short: 'TLE',
     color: 'red',
     type: 'error'
   },
   '3': {
-    name: '内存超限 / MLE',
+    name: 'Memory Limit Exceeded',
     short: 'MLE',
     color: 'red',
     type: 'error'
   },
   '4': {
-    name: '运行异常 / RE',
+    name: 'Runtime Error',
     short: 'RE',
     color: 'red',
     type: 'error'
   },
   '5': {
-    name: '系统错误 / SE',
+    name: 'System Error',
     short: 'SE',
     color: 'red',
     type: 'error'
   },
   '6': {
-    name: '请等待',
+    name: 'Pending',
     color: 'yellow',
     type: 'warning'
   },
   '7': {
-    name: '判断中',
+    name: 'Judging',
     color: 'blue',
     type: 'info'
   },
@@ -64,7 +64,7 @@ export const JUDGE_STATUS = {
     type: 'info'
   },
   '9': {
-    name: '提交中',
+    name: 'Submitting',
     color: 'yellow',
     type: 'warning'
   }
@@ -78,15 +78,15 @@ export const CONTEST_STATUS = {
 
 export const CONTEST_STATUS_REVERSE = {
   '1': {
-    name: '未开始',
+    name: 'Not Started',
     color: 'yellow'
   },
   '0': {
-    name: '进行中',
+    name: 'Underway',
     color: 'green'
   },
   '-1': {
-    name: '已结束',
+    name: 'Ended',
     color: 'red'
   }
 }
