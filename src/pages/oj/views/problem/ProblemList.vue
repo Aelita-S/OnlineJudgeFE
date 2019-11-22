@@ -33,9 +33,9 @@
           </li>
 
           <li>
-            <Button type="info" @click="pickone">
-              <Icon type="shuffle"></Icon>
-              随机选题
+            <Button type="info" @click="onReset">
+              <Icon type="refresh"></Icon>
+              {{$t('m.Reset')}}
             </Button>
           </li>
 

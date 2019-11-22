@@ -25,7 +25,6 @@
         <li>{{$t('m.How_to_report_bugs')}}
           <p>{{$t('m.How_to_report_bugs_answer_part_1')}} <a href="https://github.com/QingdaoU/OnlineJudge">Github</a>
             {{$t('m.How_to_report_bugs_answer_part_2')}}<br>或者直接联系深大电协，管理员 Email：<span><b>2018132153@email.szu.edu.cn</b></span>
-
           </p>
         </li>
       </ul>

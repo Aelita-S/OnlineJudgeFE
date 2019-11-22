@@ -1,6 +1,6 @@
 <template>
   <div class="view">
-    <Panel :title="contestId ? this.$i18n.t('m.Contest_Problem_List') : this.$i18n.t('m.Problem_List')">
+    <Panel :title="contestId ? '比赛&练习 问题列表' : '问题列表'">
       <div slot="header">
         <el-input
           v-model="keyword"
