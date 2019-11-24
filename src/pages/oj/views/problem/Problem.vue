@@ -63,21 +63,21 @@
               <template v-if="!this.contestID || (this.contestID && OIContestRealTimePermission)">
                 <span>{{$t('m.Status')}}</span>
                 <Tag type="dot" :color="submissionStatus.color" @click.native="handleRoute('/status/'+submissionId)">
-                  {{submissionStatus.text}}
+                  {{$t('m.' + submissionStatus.text.replace(/ /g, "_"))}}
                 </Tag>
               </template>
               <template v-else-if="this.contestID && !OIContestRealTimePermission">
-                <Alert type="success" show-icon>上传成功</Alert>
+                <Alert type="success" show-icon>{{$t('m.Submitted_successfully')}}</Alert>
               </template>
             </div>
             <div v-else-if="problem.my_status === 0">
-              <Alert type="success" show-icon>你已经解决了这个问题</Alert>
+              <Alert type="success" show-icon>{{$t('m.You_have_solved_the_problem')}}</Alert>
             </div>
             <div v-else-if="this.contestID && !OIContestRealTimePermission && submissionExists">
-              <Alert type="success" show-icon>你已经解决了这个问题</Alert>
+              <Alert type="success" show-icon>{{$t('m.You_have_submitted_a_solution')}}</Alert>
             </div>
             <div v-if="contestEnded">
-              <Alert type="warning" show-icon>比赛已经结束</Alert>
+              <Alert type="warning" show-icon>{{$t('m.Contest_has_ended')}}</Alert>
             </div>
           </Col>
 
@@ -93,8 +93,8 @@
             <Button type="warning" icon="edit" :loading="submitting" @click="submitCode"
                     :disabled="problemSubmitDisabled || submitted"
                     class="fl-right">
-              <span v-if="submitting">上传中</span>
-              <span v-else>上传</span>
+              <span v-if="submitting">{{$t('m.Submitting')}}</span>
+              <span v-else>{{$t('m.Submit')}}</span>
             </Button>
           </Col>
         </Row>
@@ -106,29 +106,29 @@
         <template v-if="this.contestID">
           <VerticalMenu-item :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
             <Icon type="ios-photos"></Icon>
-            问题
+            {{$t('m.Problems')}}
           </VerticalMenu-item>
 
           <VerticalMenu-item :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
             <Icon type="chatbubble-working"></Icon>
-            公告栏
+            {{$t('m.Announcements')}}
           </VerticalMenu-item>
         </template>
 
         <VerticalMenu-item v-if="!this.contestID || OIContestRealTimePermission" :route="submissionRoute">
           <Icon type="navicon-round"></Icon>
-          上传状况
+           {{$t('m.Submissions')}}
         </VerticalMenu-item>
 
         <template v-if="this.contestID">
           <VerticalMenu-item v-if="!this.contestID || OIContestRealTimePermission"
                              :route="{name: 'contest-rank', params: {contestID: contestID}}">
             <Icon type="stats-bars"></Icon>
-            排名
+            {{$t('m.Rankings')}}
           </VerticalMenu-item>
           <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
             <Icon type="home"></Icon>
-            比赛
+            {{$t('m.View_Contest')}}
           </VerticalMenu-item>
         </template>
       </VerticalMenu>
@@ -157,7 +157,7 @@
             <p>{{problem.created_by.username}}</p></li>
           <li v-if="problem.difficulty">
             <p>{{$t('m.Level')}}</p>
-            <p>{{problem.difficulty}}</p></li>
+            <p>{{$t('m.' + problem.difficulty)}}</p></li>
           <li v-if="problem.total_score">
             <p>{{$t('m.Score')}}</p>
             <p>{{problem.total_score}}</p>
@@ -166,7 +166,7 @@
             <p>{{$t('m.Tags')}}</p>
             <p>
               <Poptip trigger="hover" placement="left-end">
-                <a>Show</a>
+                <a>{{$t('m.Show')}}</a>
                 <div slot="content">
                   <Tag v-for="tag in problem.tags" :key="tag">{{tag}}</Tag>
                 </div>
@@ -179,7 +179,7 @@
       <Card id="pieChart" :padding="0" v-if="!this.contestID || OIContestRealTimePermission">
         <div slot="title">
           <Icon type="ios-analytics"></Icon>
-          <span class="card-title">数据</span>
+          <span class="card-title">{{$t('m.Statistic')}}</span>
           <Button type="ghost" size="small" id="detail" @click="graphVisible = !graphVisible">Details</Button>
         </div>
         <div class="echarts">
@@ -193,7 +193,7 @@
         <ECharts :options="largePie" :initOptions="largePieInitOpts"></ECharts>
       </div>
       <div slot="footer">
-        <Button type="ghost" @click="graphVisible=false">Close</Button>
+        <Button type="ghost" @click="graphVisible=false">{{$t('m.Close')}}</Button>
       </div>
     </Modal>
   </div>
@@ -359,12 +359,14 @@
       },
       onResetToTemplate () {
         this.$Modal.confirm({
-          content: '你确定你想要重置你的代码吗？',
+          content: this.$i18n.t('m.Are_you_sure_you_want_to_reset_your_code'),
           onOk: () => {
             let template = this.problem.template
             this.code = ''
             if (template && template[this.language]) {
               this.code = template[this.language]
+            } else {
+              this.code = ''
             }
           }
         })
@@ -396,7 +398,7 @@
       },
       submitCode () {
         if (this.code.trim() === '') {
-          this.$error('代码不能为空')
+          this.$error(this.$i18n.t('m.Code_can_not_be_empty'))
           return
         }
         this.submissionId = ''
@@ -420,8 +422,8 @@
             this.submissionExists = true
             if (!detailsVisible) {
               this.$Modal.success({
-                title: 'success',
-                content: '代码上传成功'
+                title: this.$i18n.t('m.Success'),
+                content: this.$i18n.t('m.Submit_code_successfully')
               })
               return
             }
@@ -441,7 +443,7 @@
           if (this.submissionExists) {
             this.$Modal.confirm({
               title: '',
-              content: '<h3>在这个问题中你已经上传，你确定要覆盖吗？<h3>',
+              content: '<h3>' + this.$i18n.t('m.You_have_submission_in_this_problem_sure_to_cover_it') + '<h3>',
               onOk: () => {
                 // 暂时解决对话框与后面提示对话框冲突的问题(否则一闪而过）
                 setTimeout(() => {

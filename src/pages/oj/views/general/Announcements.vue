@@ -34,7 +34,7 @@
               </a></div>
               <div class="date" style="text-align : left;">{{announcement.create_time}}发布</div>
               <div class="date" style="text-align : left;">{{announcement.last_update_time}}更新</div>
-              <div class="creator"> By {{announcement.created_by.username}}</div>
+              <div class="creator"> {{$t('m.By')}} {{announcement.created_by.username}}</div>
             </div>
           </li>
         </ul>
@@ -155,7 +155,7 @@
     computed: {
       title () {
         if (this.listVisible) {
-          return this.isContest ? 'Contest Announcements' : 'Announcements'
+          return this.isContest ? this.$i18n.t('m.Contest_Announcements') : this.$i18n.t('m.Announcements')
         } else {
           return this.announcement.title
         }

@@ -49,9 +49,9 @@
           <el-col :span="8">
             <el-form-item :label="$t('m.Difficulty')">
               <el-select class="difficulty-select" size="small" :placeholder="$t('m.Difficulty')" v-model="problem.difficulty">
-                <el-option label="Low" value="Low"></el-option>
-                <el-option label="Mid" value="Mid"></el-option>
-                <el-option label="High" value="High"></el-option>
+                <el-option :label="$t('m.Low')" value="Low"></el-option>
+                <el-option :label="$t('m.Mid')" value="Mid"></el-option>
+                <el-option :label="$t('m.High')" value="High"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -77,7 +77,7 @@
           </el-col>
           
           <el-col :span="8">
-            <el-form-item label="标签" :error="error.tags" required>
+            <el-form-item :label="$t('m.Tag')" :error="error.tags" required>
               <span class="tags">
                 <el-tag
                   v-for="tag in problem.tags"
@@ -393,7 +393,7 @@
 
         // get problem after getting languages list to avoid find undefined value in `watch problem.languages`
         if (this.mode === 'edit') {
-          this.title = 'Edit Problem'
+          this.title = this.$i18n.t('m.Edit_Problem')
           let funcName = {'edit-problem': 'getProblem', 'edit-contest-problem': 'getContestProblem'}[this.routeName]
           api[funcName](this.$route.params.problemId).then(problemRes => {
             let data = problemRes.data.data
@@ -405,7 +405,7 @@
             this.testCaseUploaded = true
           })
         } else {
-          this.title = '添加问题'
+          this.title = this.$i18n.t('m.Add_Problem')
           for (let item of allLanguage.languages) {
             this.problem.languages.push(item.name)
           }
@@ -486,12 +486,12 @@
         let inputValue = this.tagInput
         if (inputValue) {
           this.problem.tags.push(inputValue)
-          this.inputVisible = false
-          this.tagInput = ''
-          for (let i = 0; i < this.tags.length; i++) {
-            if (this.tags[i] === inputValue) {
-              this.tags.splice(i, 1)
-            }
+        }
+        this.inputVisible = false
+        this.tagInput = ''
+        for (let i = 0; i < this.tags.length; i++) {
+          if (this.tags[i] === inputValue) {
+            this.tags.splice(i, 1)
           }
         }
       },
@@ -688,4 +688,3 @@
     overflow-x: scroll;
   }
 </style>
-

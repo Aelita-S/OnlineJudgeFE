@@ -1,5 +1,5 @@
 <template>
-  <el-button plain type="primary">取消</el-button>
+  <el-button plain type="primary">{{$t('m.Cancel')}}</el-button>
 </template>
 <script>
   export default{
