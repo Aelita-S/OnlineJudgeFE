@@ -77,7 +77,6 @@
     },
     methods: {
       getAItime (time) {
-        var result
         var ttime
         ttime = new Date(time).toJSON()
         ttime = new Date(+new Date(ttime) + 28800000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ' ').replace(/-/gi, '/')
@@ -89,13 +88,12 @@
         var dayC = d / 86400000
         var hourC = d / 3600000
         var minC = d / 60000
-        if (monthC >= 1) result = parseInt(monthC) + '个月前'
-        else if (weekC >= 1) result = parseInt(weekC) + '周前'
-        else if (dayC >= 1) result = parseInt(dayC) + '天前'
-        else if (hourC >= 1) result = parseInt(hourC) + '小时前'
-        else if (minC >= 1) result = parseInt(minC) + '分钟前'
-        else result = '刚刚'
-        return result
+        if (monthC >= 1) return parseInt(monthC) + '个月前'
+        else if (weekC >= 1) return parseInt(weekC) + '周前'
+        else if (dayC >= 1) return parseInt(dayC) + '天前'
+        else if (hourC >= 1) return parseInt(hourC) + '小时前'
+        else if (minC >= 1) return parseInt(minC) + '分钟前'
+        else return '刚刚'
       },
       init () {
         if (this.isContest) {
