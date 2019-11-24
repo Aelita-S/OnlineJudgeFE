@@ -128,8 +128,8 @@
       sortList (arr) {
         let list = []
         for (let i = 0; i < arr.length; i++) {
-          arr[i].create_time = getAItime(arr[i].create_time)
-          arr[i].last_update_time = getAItime(arr[i].last_update_time)
+          arr[i].create_time = this.getAItime(arr[i].create_time)
+          arr[i].last_update_time = this.getAItime(arr[i].last_update_time)
           if (arr[i].istop) {
             list.push(arr[i])
           }
