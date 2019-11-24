@@ -76,6 +76,27 @@
       this.init()
     },
     methods: {
+      getAItime (time) {
+        var result
+        var ttime
+        ttime = new Date(time).toJSON()
+        ttime = new Date(+new Date(ttime) + 28800000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ' ').replace(/-/gi, '/')
+        ttime = Date.parse(ttime)
+        var now = new Date().getTime()
+        var d = now - ttime
+        var monthC = d / 2592000000
+        var weekC = d / 604800000
+        var dayC = d / 86400000
+        var hourC = d / 3600000
+        var minC = d / 60000
+        if (monthC >= 1) result = parseInt(monthC) + '个月前'
+        else if (weekC >= 1) result = parseInt(weekC) + '周前'
+        else if (dayC >= 1) result = parseInt(dayC) + '天前'
+        else if (hourC >= 1) result = parseInt(hourC) + '小时前'
+        else if (minC >= 1) result = parseInt(minC) + '分钟前'
+        else result = '刚刚'
+        return result
+      },
       init () {
         if (this.isContest) {
           this.getContestAnnouncementList()
@@ -144,27 +165,6 @@
       }
     }
   }
-function getAItime (time) {
-    var result
-    var ttime
-    ttime = new Date(time).toJSON()
-    ttime = new Date(+new Date(ttime) + 28800000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ' ').replace(/-/gi, '/')
-    ttime = Date.parse(ttime)
-    var now = new Date().getTime()
-    var d = now - ttime
-    var monthC = d / 2592000000
-    var weekC = d / 604800000
-    var dayC = d / 86400000
-    var hourC = d / 3600000
-    var minC = d / 60000
-    if (monthC >= 1) result = parseInt(monthC) + '个月前'
-    else if (weekC >= 1) result = parseInt(weekC) + '周前'
-    else if (dayC >= 1) result = parseInt(dayC) + '天前'
-    else if (hourC >= 1) result = parseInt(hourC) + '小时前'
-    else if (minC >= 1) result = parseInt(minC) + '分钟前'
-    else result = '刚刚'
-    return result
-}
 </script>
 
 <style scoped lang="less">
