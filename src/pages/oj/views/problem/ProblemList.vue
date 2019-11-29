@@ -83,7 +83,7 @@
           label="状态"
           width="50"
         >
-          <template slot-scope='scope'>
+          <template v-slot='scope'>
             <Icon
               v-if="scope.row.my_status === null || scope.row.my_status === undefined?false:true"
               :type="scope.row.my_status === 0 ? 'checkmark-round' : 'minus-round'"
@@ -109,7 +109,7 @@
           label="难度"
           width="150"
         >
-          <template slot-scope='scope'>
+          <template v-slot='scope'>
             <Tag
               :color="getColor(scope.row.difficulty)"
               style='width:30px'
@@ -127,7 +127,7 @@
           label="通过率"
           width="225"
         >
-          <template slot-scope='scope'>
+          <template v-slot='scope'>
             <el-progress
               v-if="scope.row.submission_number>=10"
               stroke-width='15px'
@@ -146,9 +146,9 @@
           v-if="tagVisible"
           label="标签"
         >
-          <template slot-scope='scope'>
+          <template v-slot='scope'>
             <template v-for="tag in scope.row.tags">
-              <el-tag style="padding: 2px;margin:4px 4px;">{{tag}}</el-tag>
+              <el-tag style="padding: 2px; margin:4px 4px;">{{tag}}</el-tag>
             </template>
           </template>
         </el-table-column>

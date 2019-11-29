@@ -12,6 +12,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "@vue/cli": "^4.1.1",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "browser-detect": "^0.2.27",
