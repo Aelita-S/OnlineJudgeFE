@@ -1,7 +1,13 @@
 <template>
-  <Row type="flex" :gutter="18">
+  <Row
+    type="flex"
+    :gutter="18"
+  >
     <Col :span=19>
-    <Panel shadow>
+    <Panel
+      shadow
+      style="min-width:900px;"
+    >
       <div slot="title">{{$t('m.Problem_List')}}</div>
       <div slot="extra">
         <ul class="filter">
@@ -13,347 +19,408 @@
               <Dropdown-menu slot="list">
                 <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
                 <Dropdown-item name="Low">{{$t('m.Low')}}</Dropdown-item>
-                <Dropdown-item name="Mid" >{{$t('m.Mid')}}</Dropdown-item>
+                <Dropdown-item name="Mid">{{$t('m.Mid')}}</Dropdown-item>
                 <Dropdown-item name="High">{{$t('m.High')}}</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
           </li>
           <li>
-            <i-switch size="large" @on-change="handleTagsVisible">
+            <i-switch
+              size="large"
+              v-model="tagVisible"
+            >
               <span slot="open">{{$t('m.Tags')}}</span>
               <span slot="close">{{$t('m.Tags')}}</span>
             </i-switch>
           </li>
           <li>
-            <Input v-model="query.keyword"
-                    @on-enter="filterByKeyword"
-                    @on-click="filterByKeyword"
-                    placeholder="搜索关键词"
-                    icon="ios-search-strong"/>
+            <Input
+              v-model="query.keyword"
+              @on-enter="filterByKeyword"
+              @on-click="filterByKeyword"
+              placeholder="搜索关键词"
+              icon="ios-search-strong"
+            />
           </li>
 
           <li>
-            <Button type="info" @click="pickone">
+            <Button
+              type="info"
+              @click="pickone"
+            >
               <Icon type="refresh"></Icon>
               随机选题
             </Button>
           </li>
 
           <li>
-            <Button v-if='!isReserved' type="warning" v-on:click='changeOldtoNew'>
-              <Icon class="el-icon-sort-down"></Icon>
-              问题从旧到新
-            </Button>
-            <Button v-else-if='isReserved' type="success" v-on:click="changeOldtoNew">
-              <Icon class="el-icon-sort-up"></Icon>
-              问题从新到旧
-            </Button>
+            <span>排序方式:</span>
+            <el-select
+              v-model="selectHowToShow"
+              placeholder="请选择排序方式"
+              size="small"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
           </li>
 
         </ul>
       </div>
-      <Table style="width: 100%; font-size: 16px;"
-              :columns="problemTableColumns"
-              :data="problemList"
-              :loading="loadings.table"
-              disabled-hover></Table>
+
+      <el-table
+        @row-click='pushProblemDetail'
+        :data="problemList"
+        style="width: 100%"
+      >
+        <el-table-column
+          v-if="isAuthenticated"
+          label="状态"
+          width="50"
+        >
+          <template slot-scope='scope'>
+            <Icon
+              v-if="scope.row.my_status === null || scope.row.my_status === undefined?false:true"
+              :type="scope.row.my_status === 0 ? 'checkmark-round' : 'minus-round'"
+              :color="scope.row.my_status === 0 ? '#19be6b' : '#ed3f14'"
+              size='16'
+            >
+            </Icon>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="_id"
+          label="ID"
+          width="115"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="title"
+          label="题目"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="difficulty"
+          label="难度"
+          width="150"
+        >
+          <template slot-scope='scope'>
+            <Tag
+              :color="getColor(scope.row.difficulty)"
+              style='width:30px'
+              disable-transitions
+            >{{$t('m.'+scope.row.difficulty)}}</Tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="submission_number"
+          label="提交数"
+          width="125"
+        >
+        </el-table-column>
+        <el-table-column
+          label="通过率"
+          width="225"
+        >
+          <template slot-scope='scope'>
+            <el-progress
+              v-if="scope.row.submission_number>=10"
+              stroke-width='15px'
+              :percentage='getACRate(scope.row)'
+              :color="getColor(getACRate(scope.row))"
+              style="width:100%"
+            ></el-progress>
+            <el-tag
+              size="small"
+              type="info"
+              v-else
+            >提交数不足，快来试试吧！</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="tagVisible"
+          label="标签"
+        >
+          <template slot-scope='scope'>
+            <template v-for="tag in scope.row.tags">
+              <el-tag style="padding: 2px;margin:4px 4px;">{{tag}}</el-tag>
+            </template>
+          </template>
+        </el-table-column>
+
+      </el-table>
     </Panel>
-    <Pagination :total="total" :page-size="limit" @on-change="pushRouter" :current.sync="query.page"></Pagination>
+    <Pagination
+      :total="total"
+      :page-size="limit"
+      @on-change="pushRouter"
+      :current.sync="query.page"
+    ></Pagination>
 
     </Col>
 
     <Col :span="5">
     <Panel :padding="10">
-      <div slot="title" class="taglist-title">{{$t('m.Tags')}}</div>
+      <div
+        slot="title"
+        class="taglist-title"
+      >{{$t('m.Tags')+"筛选"}}</div>
       <template v-for="tag in tagList">
-      <Button v-if="query.tag===tag.name"
-              :key="tag.name"
-              @click="disableTag(tag)"
-              type="info"
-              shape="circle"
-              class="tag-btn">
-              <Font color="white" v-if="tag.name == query.tag">{{tag.name}}</Font>
-      </Button>
-      <Button v-else
-              :key="tag.name"
-              @click="disableTag(tag)"
-              type="ghost"
-              shape="circle"
-              class="tag-btn">
-              <Font color="red" v-if="tag.name == query.tag">{{tag.name}}</Font>
-              <Font color="black" v-else>{{tag.name}}</Font>
-      </Button>
+        <Button
+          v-if="query.tag===tag.name"
+          :key="tag.name"
+          @click="disableTag(tag)"
+          type="info"
+          shape="circle"
+          class="tag-btn"
+        >
+          <Font
+            color="white"
+            v-if="tag.name == query.tag"
+          >{{tag.name}}</Font>
+        </Button>
+        <Button
+          v-else
+          :key="tag.name"
+          @click="disableTag(tag)"
+          type="ghost"
+          shape="circle"
+          class="tag-btn"
+        >
+          <Font
+            color="red"
+            v-if="tag.name == query.tag"
+          >{{tag.name}}</Font>
+          <Font
+            color="black"
+            v-else
+          >{{tag.name}}</Font>
+        </Button>
       </template>
-      <Button long id="pick-one" @click="onReset">
+      <Button
+        long
+        id="pick-one"
+        @click="onReset"
+      >
         <Icon type="refresh"></Icon>
         重置标签
       </Button>
     </Panel>
-    <Spin v-if="loadings.tag" fix size="large"></Spin>
+    <Spin
+      v-if="loadings.tag"
+      fix
+      size="large"
+    ></Spin>
     </Col>
   </Row>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import api from '@oj/api'
-  import utils from '@/utils/utils'
-  import { ProblemMixin } from '@oj/components/mixins'
-  import Pagination from '@oj/components/Pagination'
+import {
+  mapGetters
+} from 'vuex'
+import api from '@oj/api'
+import utils from '@/utils/utils'
+import {
+  ProblemMixin
+} from '@oj/components/mixins'
+import Pagination from '@oj/components/Pagination'
 
-  export default {
-    name: 'ProblemList',
-    mixins: [ProblemMixin],
-    components: {
-      Pagination
-    },
-    data () {
-      return {
-        isReserved: false,
-        tagList: [],
-        problemTableColumns: [
-          {
-            title: 'ID',
-            key: '_id',
-            width: 80,
-            render: (h, params) => {
-              return h('Button', {
-                props: {
-                  type: 'text',
-                  size: 'large'
-                },
-                on: {
-                  click: () => {
-                    this.$router.push({name: 'problem-details', params: {problemID: params.row._id}})
-                  }
-                },
-                style: {
-                  padding: '2px 0'
-                }
-              }, params.row._id)
-            }
-          },
-          {
-            title: this.$i18n.t('m.Title'),
-            width: 400,
-            render: (h, params) => {
-              return h('Button', {
-                props: {
-                  type: 'text',
-                  size: 'large'
-                },
-                on: {
-                  click: () => {
-                    this.$router.push({name: 'problem-details', params: {problemID: params.row._id}})
-                  }
-                },
-                style: {
-                  padding: '2px 0',
-                  overflowX: 'auto',
-                  textAlign: 'left',
-                  width: '100%'
-                }
-              }, params.row.title)
-            }
-          },
-          {
-            title: this.$i18n.t('m.Level'),
-            render: (h, params) => {
-              let t = params.row.difficulty
-              let color = 'orange'
-              if (t === 'Low') color = 'LightGreen'
-              else if (t === 'High') color = 'red'
-              return h('Tag', {
-                props: {
-                  color: color
-                }
-              }, this.$i18n.t('m.' + params.row.difficulty))
-            }
-          },
-          {
-            title: this.$i18n.t('m.Total'),
-            key: 'submission_number'
-          },
-          {
-            title: this.$i18n.t('m.AC_Rate'),
-            render: (h, params) => {
-              let acRate = (params.row.accepted_number / params.row.submission_number * 100).toFixed(1)
-              let status
-              if (acRate > 45) {
-                status = 'success'
-              } else if (acRate > 25) {
-                status = 'warning'
-              } else {
-                status = 'exception'
-              }
-              return h('el-progress', {
-                props: {
-                  'text-inside': 'true',
-                  'stroke-width': 24,
-                  'percentage': acRate,
-                  status: status
-                }
-              }
-            , params.row)
-            }
-          }
-        ],
-        problemList: [],
-        limit: 20,
-        total: 0,
-        loadings: {
-          table: true,
-          tag: true
-        },
-        routeName: '',
-        query: {
-          keyword: '',
-          difficulty: '',
-          tag: '',
-          page: 1
-        }
+export default {
+  name: 'ProblemList',
+  mixins: [ProblemMixin],
+  components: {
+    Pagination
+  },
+  data () {
+    return {
+      selectHowToShow: 'old',
+      tagList: [],
+      options: [{
+        value: 'old',
+        label: '时间从旧到新'
+      },
+      {
+        value: 'new',
+        label: '时间从新到旧'
+      },
+      {
+        value: 'correct',
+        label: '正确率从高到低'
+      },
+      {
+        value: 'wrong',
+        label: '正确率从低到高'
       }
-    },
-    mounted () {
-      this.init()
-      this.getTagList()
-    },
-    methods: {
-      init (simulate = false) {
-        this.routeName = this.$route.name
-        let query = this.$route.query
-        this.query.difficulty = query.difficulty || ''
-        this.query.keyword = query.keyword || ''
-        this.query.tag = query.tag || ''
-        this.query.page = parseInt(query.page) || 1
-        if (this.query.page < 1) {
-          this.query.page = 1
-        }
-        if (!simulate) {
-          this.getTagList()
-        }
-        this.getProblemList()
+      ],
+      problemList: [],
+      limit: 20,
+      total: 0,
+      tagVisible: false,
+      loadings: {
+        tag: true
       },
-      pushRouter () {
-        this.$router.push({
-          name: 'problem-list',
-          query: utils.filterEmptyValue(this.query)
-        })
-      },
-      getProblemList () {
-        let offset = (this.query.page - 1) * this.limit
-        this.loadings.table = true
-  
-        api.getProblemList(offset, this.limit, this.isReserved, this.query).then(res => {
-          this.problemList = res.data.data.results
-          this.loadings.table = false
-          this.total = res.data.data.total
-          if (this.isAuthenticated) {
-            this.addStatusColumn(this.problemTableColumns, res.data.data.results)
-          }
-        }, res => {
-          this.loadings.table = false
-        })
-      },
-      disableTag (tag) {
-        if (this.query.tag === tag.name) {
-          this.$router.push({name: 'problem-list'})
-        } else {
-          this.filterByTag(tag.name)
-        }
-      },
-      getTagList () {
-        api.getProblemTagList().then(res => {
-          this.tagList = res.data.data
-          this.loadings.tag = false
-        }, res => {
-          this.loadings.tag = false
-        })
-      },
-      filterByTag (tagName) {
-        this.query.tag = tagName
-        this.query.page = 1
-        this.pushRouter()
-      },
-      filterByDifficulty (difficulty) {
-        this.query.difficulty = difficulty
-        this.query.page = 1
-        this.pushRouter()
-      },
-      filterByKeyword () {
-        this.query.page = 1
-        this.pushRouter()
-      },
-      handleTagsVisible (value) {
-        if (value) {
-          this.problemTableColumns.push(
-            {
-              title: this.$i18n.t('m.Tags'),
-              align: 'center',
-              render: (h, params) => {
-                let tags = []
-                params.row.tags.forEach(tag => {
-                  tags.push(h('Tag', {}, tag))
-                })
-                return h('div', {
-                  style: {
-                    margin: '8px 0'
-                  }
-                }, tags)
-              }
-            })
-        } else {
-          this.problemTableColumns.splice(this.problemTableColumns.length - 1, 1)
-        }
-      },
-      onReset () {
-        this.disabledTagList = []
-        this.getTagList()
-        this.isDisabled = false
-        this.$router.push({name: 'problem-list'})
-      },
-      pickone () {
-        api.pickone().then(res => {
-          this.$success('Good Luck')
-          this.$router.push({name: 'problem-details', params: {problemID: res.data.data}})
-        })
-      },
-      changeOldtoNew () {
-        this.isReserved = !this.isReserved
-        this.getProblemList()
-      }
-    },
-    computed: {
-      ...mapGetters(['isAuthenticated'])
-    },
-    watch: {
-      '$route' (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.init(true)
-        }
-      },
-      'isAuthenticated' (newVal) {
-        if (newVal === true) {
-          this.init()
-        }
+      routeName: '',
+      query: {
+        keyword: '',
+        difficulty: '',
+        tag: '',
+        page: 1
       }
     }
+  },
+  mounted () {
+    this.init()
+    this.getTagList()
+  },
+  methods: {
+    init (simulate = false) {
+      this.routeName = this.$route.name
+      let query = this.$route.query
+      this.query.difficulty = query.difficulty || ''
+      this.query.keyword = query.keyword || ''
+      this.query.tag = query.tag || ''
+      this.query.page = parseInt(query.page) || 1
+      if (this.query.page < 1) {
+        this.query.page = 1
+      }
+      if (!simulate) {
+        this.getTagList()
+      }
+      this.getProblemList()
+    },
+    getACRate (row) {
+      return (row.accepted_number / row.submission_number * 100).toFixed(0)
+    },
+    getColor (description) {
+      let color = 'orange'
+      if (description === 'Low' || description > 45) color = 'LightGreen'
+      else if (description === 'High' || description < 25) color = 'red'
+      return color
+    },
+    pushRouter () {
+      this.$router.push({
+        name: 'problem-list',
+        query: utils.filterEmptyValue(this.query)
+      })
+    },
+    pushProblemDetail (row) {
+      this.$router.push({
+        name: 'problem-details',
+        params: {
+          problemID: row._id
+        }
+      })
+    },
+    getProblemList () {
+      let offset = (this.query.page - 1) * this.limit
+      var isReserved = false
+      var sortByAC = false
+      if (this.selectHowToShow === 'new') {
+        isReserved = true
+        sortByAC = false
+      } else if (this.selectHowToShow === 'correct') {
+        isReserved = true
+        sortByAC = true
+      } else if (this.selectHowToShow === 'wrong') {
+        isReserved = false
+        sortByAC = true
+      }
+      api.getProblemList(offset, this.limit, isReserved, sortByAC, this.query).then(res => {
+        this.problemList = res.data.data.results
+        this.total = res.data.data.total
+      })
+    },
+    disableTag (tag) {
+      if (this.query.tag === tag.name) {
+        this.$router.push({
+          name: 'problem-list'
+        })
+      } else {
+        this.filterByTag(tag.name)
+      }
+    },
+    getTagList () {
+      api.getProblemTagList().then(res => {
+        this.tagList = res.data.data
+        this.loadings.tag = false
+      }, res => {
+        this.loadings.tag = false
+      })
+    },
+    filterByTag (tagName) {
+      this.query.tag = tagName
+      this.query.page = 1
+      this.pushRouter()
+    },
+    filterByDifficulty (difficulty) {
+      this.query.difficulty = difficulty
+      this.query.page = 1
+      this.pushRouter()
+    },
+    filterByKeyword () {
+      this.query.page = 1
+      this.pushRouter()
+    },
+    onReset () {
+      this.disabledTagList = []
+      this.getTagList()
+      this.isDisabled = false
+      this.$router.push({
+        name: 'problem-list'
+      })
+    },
+    pickone () {
+      api.pickone().then(res => {
+        this.$success('Good Luck')
+        this.$router.push({
+          name: 'problem-details',
+          params: {
+            problemID: res.data.data
+          }
+        })
+      })
+    }
+  },
+  computed: {
+    ...mapGetters(['isAuthenticated'])
+  },
+  watch: {
+    '$route' (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.init(true)
+      }
+    },
+    'isAuthenticated' (newVal) {
+      if (newVal === true) {
+        this.init()
+      }
+    },
+    selectHowToShow (newVal) {
+      this.getProblemList()
+    }
   }
+}
 </script>
 
-<style scoped lang="less">
-  .taglist-title {
-    margin-left: -10px;
-    margin-bottom: -10px;
-  }
+<style lang="less" scoped>
+.taglist-title {
+  margin-left: -10px;
+  margin-bottom: -10px;
+}
 
-  .tag-btn {
-    margin-right: 5px;
-    margin-bottom: 10px;
-  }
+.tag-btn {
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
 
-  #pick-one {
-    margin-top: 10px;
-  }
+#pick-one {
+  margin-top: 10px;
+}
 </style>
 <!--a-->
