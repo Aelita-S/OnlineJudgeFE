@@ -23,13 +23,30 @@
                      v-clipboard:success="onCopy"
                      v-clipboard:error="onCopyError">
                     <Icon type="clipboard"></Icon>
+                    <span>{{"<-点我复制"}}</span>
                   </a>
                 </p>
-                <pre>{{sample.input}}</pre>
+                <el-input
+                  type="textarea"
+                  :value="sample.input"
+                  spellcheck="false"
+                  :autosize= '{minRows: 5, maxRows: 10}'
+                  style="font-family:'Consolas'"
+                  resize='none'
+                  >
+                </el-input>
               </div>
               <div class="sample-output">
                 <p class="title">{{$t('m.Sample_Output')}} {{index + 1}}</p>
-                <pre>{{sample.output}}</pre>
+                  <el-input
+                  type="textarea"
+                  spellcheck="false"
+                  :value="sample.output"
+                  :autosize= '{minRows: 5, maxRows: 10}'
+                  style="font-family:'Consolas';background-color:none repeat scroll 0 0 #8DB8FF;"
+                  resize='none'
+                  >
+                </el-input>
               </div>
             </div>
           </div>
@@ -621,6 +638,10 @@
     margin-top: 20px;
     width: 500px;
     height: 480px;
+  }
+  input {
+    font-family:'Consolas';
+    color:'red';
   }
 </style>
 
