@@ -4,8 +4,7 @@
       公告
     </div>
     <div slot="extra">
-      <Button v-if="listVisible" type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
-      <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{$t('m.Back')}}</Button>
+      <Button type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
     </div>
 
     <div align="center" slot="title" v-if="!listVisible" >
@@ -15,7 +14,7 @@
       <div class="no-announcement" v-if="!announcements.length" key="no-announcement">
         <p>{{$t('m.No_Announcements')}}</p>
       </div>
-      <template v-if="listVisible">
+      <template>
         <ul class="announcements-container" key="list">
           <li v-for="announcement in announcements" :key="announcement.title">
             <div class="flex-container">
@@ -38,14 +37,18 @@
             </div>
           </li>
           <el-dialog
-                :title="this.announcement.title"
                 :visible.sync="dialogVisible"
                 width="80%"
                 :before-close="done">
+                <template slot="title">
+                  <h1 style="text-align:center;">{{this.announcement.title}}</h1>
+                </template>
+                <el-card>
                 <div v-katex v-html="this.announcement.content" key="content" class="content-container markdown-body"></div>
-                <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                </span>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="dialogVisible = false">返回</el-button>
+                  </span>
+                </el-card>
           </el-dialog>
         </ul>
         <Pagination v-if="!isContest"
@@ -56,9 +59,6 @@
         </Pagination>
       </template>
 
-      <template v-else>
-        <div v-katex v-html="announcement.content" key="content" class="content-container markdown-body"></div>
-      </template>
     </transition-group>
   </Panel>
 </template>
@@ -154,7 +154,6 @@
       },
       goAnnouncement (announcement) {
         this.announcement = announcement
-        // this.ListVisible = false
         this.dialogVisible = true
       },
       goBack () {
