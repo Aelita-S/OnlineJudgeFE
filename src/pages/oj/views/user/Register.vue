@@ -1,11 +1,6 @@
 <template>
 <div>
     <Form ref="formRegister" :model="formRegister" :rules="ruleRegister">
-      <FormItem prop="school">
-        <Input type="text" v-model="formRegister.Name" placeholder='昵称' size="large" @on-enter="handleRegister">
-        <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
-      </FormItem>
       <FormItem prop="username">
         <Input type="text" v-model="formRegister.username" :placeholder="$t('m.RegisterUsername')" size="large" @on-enter="handleRegister">
         <Icon type="ios-person-outline" slot="prepend"></Icon>

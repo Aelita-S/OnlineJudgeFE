@@ -41,7 +41,7 @@
                 :title="this.announcement.title"
                 :visible.sync="dialogVisible"
                 width="80%"
-                :before-close="handleClose">
+                :before-close="done">
                 <div v-katex v-html="this.announcement.content" key="content" class="content-container markdown-body"></div>
                 <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -160,13 +160,6 @@
       goBack () {
         this.listVisible = true
         this.announcement = ''
-      },
-      handleClose (done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done()
-          })
-          .catch(_ => {})
       }
     },
     computed: {

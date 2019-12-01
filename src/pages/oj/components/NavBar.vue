@@ -71,7 +71,7 @@
         <div style="float:right">
           <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
             <Button type="text" class="drop-menu-title">
-              {{ profile.school }}
+              {{ user.username }}
               <Icon type="arrow-down-b"></Icon>
             </Button>
             <Dropdown-menu slot="list">
@@ -141,9 +141,6 @@ export default {
   computed: {
     ...mapGetters(['website', 'modalStatus', 'user', 'avatar', 'profile', 'isAuthenticated', 'isAdminRole']),
     // 跟随路由变化
-    name () {
-      return this.user.username || this.profile.school
-    },
     activeMenu () {
       return '/' + this.$route.path.split('/')[1]
     },

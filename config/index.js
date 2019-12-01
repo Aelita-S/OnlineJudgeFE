@@ -1,4 +1,4 @@
-process.env.TARGET = 'http://172.31.100.239/'
+process.env.TARGET = 'http://127.0.0.1:8000'
 'use strict'
 // Template version: 1.1.1
 // see http://vuejs-templates.github.io/webpack for documentation.
@@ -42,8 +42,8 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      "/api": commonProxy,
-      "/public": commonProxy
+      '/api': commonProxy,
+      '/public': commonProxy
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
