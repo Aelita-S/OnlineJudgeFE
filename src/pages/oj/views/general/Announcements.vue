@@ -37,6 +37,16 @@
               <div class="creator"> {{$t('m.By')}} {{announcement.created_by.username}}</div>
             </div>
           </li>
+          <el-dialog
+                :title="this.announcement.title"
+                :visible.sync="dialogVisible"
+                width="80%"
+                :before-close="handleClose">
+                <div v-katex v-html="this.announcement.content" key="content" class="content-container markdown-body"></div>
+                <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                </span>
+          </el-dialog>
         </ul>
         <Pagination v-if="!isContest"
                     key="page"
@@ -69,7 +79,8 @@
         btnLoading: false,
         announcements: [],
         announcement: '',
-        listVisible: true
+        listVisible: true,
+        dialogVisible: false
       }
     },
     mounted () {
@@ -143,11 +154,19 @@
       },
       goAnnouncement (announcement) {
         this.announcement = announcement
-        this.listVisible = false
+        // this.ListVisible = false
+        this.dialogVisible = true
       },
       goBack () {
         this.listVisible = true
         this.announcement = ''
+      },
+      handleClose (done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done()
+          })
+          .catch(_ => {})
       }
     },
     computed: {
