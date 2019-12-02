@@ -225,7 +225,7 @@
   }
 
   img{
-    max-width: 80%;
+    max-width: 100%;
     object-fit: contain;
   }
 
