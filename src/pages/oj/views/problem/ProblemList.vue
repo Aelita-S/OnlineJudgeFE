@@ -54,9 +54,8 @@
           </li>
 
           <li>
-            <span>排序方式:</span>
             <el-select
-              v-model="selectHowToShow"
+              @change='sortBySelect'
               placeholder="请选择排序方式"
               size="small"
             >
@@ -239,7 +238,6 @@ export default {
   },
   data () {
     return {
-      selectHowToShow: 'old',
       tagList: [],
       options: [{
         value: 'old',
@@ -270,7 +268,8 @@ export default {
         keyword: '',
         difficulty: '',
         tag: '',
-        page: 1
+        page: 1,
+        selected: ''
       }
     }
   },
@@ -284,6 +283,7 @@ export default {
       let query = this.$route.query
       this.query.difficulty = query.difficulty || ''
       this.query.keyword = query.keyword || ''
+      this.query.selected = query.selected || 'old'// 使得返回时能够按照点击前显示
       this.query.tag = query.tag || ''
       this.query.page = parseInt(query.page) || 1
       if (this.query.page < 1) {
@@ -319,18 +319,23 @@ export default {
     },
     getProblemList () {
       let offset = (this.query.page - 1) * this.limit
+      let selected = this.query.selected
       var isReserved = false
       var sortByAC = false
-      if (this.selectHowToShow === 'new') {
+
+      // 筛选排序方式
+      // @ToDo: 将该逻辑移到后台
+      if (selected === 'new') {
         isReserved = true
         sortByAC = false
-      } else if (this.selectHowToShow === 'correct') {
+      } else if (selected === 'correct') {
         isReserved = true
         sortByAC = true
-      } else if (this.selectHowToShow === 'wrong') {
+      } else if (selected === 'wrong') {
         isReserved = false
         sortByAC = true
       }
+
       api.getProblemList(offset, this.limit, isReserved, sortByAC, this.query).then(res => {
         this.problemList = res.data.data.results
         this.total = res.data.data.total
@@ -367,6 +372,10 @@ export default {
       this.query.page = 1
       this.pushRouter()
     },
+    sortBySelect (selected) {
+      this.query.selected = selected
+      this.pushRouter()
+    },
     onReset () {
       this.disabledTagList = []
       this.getTagList()
@@ -400,9 +409,6 @@ export default {
       if (newVal === true) {
         this.init()
       }
-    },
-    selectHowToShow (newVal) {
-      this.getProblemList()
     }
   }
 }
