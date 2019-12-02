@@ -88,7 +88,7 @@ export const m = {
   Where_is_the_input_and_the_output_answer_part_8: '或在 C ++ 中使用',
   Where_is_the_input_and_the_output_answer_part_9: '写入 stdout。用户程序不允许读取或写入文件，否则您将收到',
   What_is_the_meaning_of_submission_execution_time: '提交执行时间是什么意思？',
-  What_is_the_meaning_of_submission_execution_time_answer: 'onlinejudge 可能会使用不同的输入文件多次测试您的代码。如果您的代码在每个输入文件的时间限制内给出正确的答案，则显示的执行时间是每个测试用例所花费的最大时间。否则，执行时间将毫无意义。',
+  What_is_the_meaning_of_submission_execution_time_answer: 'onlinejudge 可能会使用不同的输入文件多次测试您的代码。如果您的代码在每个输入文件的时间限制内给出正确的答案，则显示的执行时间是每个测试用例所花费的最大时间。否则，执行时间将没有参考价值。',
   How_Can_I_use_CPP_Int64: '如何使用 C ++ Int64？',
   How_Can_I_use_CPP_Int64_answer_part_1: '您应该声明',
   How_Can_I_use_CPP_Int64_answer_part_2: '并与',
