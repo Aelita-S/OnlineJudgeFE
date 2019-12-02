@@ -12,18 +12,35 @@
       <div slot="extra">
         <ul class="filter">
           <li>
-            <Dropdown @on-click="filterByDifficulty">
-              <span>{{query.difficulty === '' ? this.$i18n.t('m.Difficulty') : this.$i18n.t('m.' + query.difficulty)}}
-                <Icon type="arrow-down-b"></Icon>
-              </span>
-              <Dropdown-menu slot="list">
-                <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
-                <Dropdown-item name="Low">{{$t('m.Low')}}</Dropdown-item>
-                <Dropdown-item name="Mid">{{$t('m.Mid')}}</Dropdown-item>
-                <Dropdown-item name="High">{{$t('m.High')}}</Dropdown-item>
-              </Dropdown-menu>
-            </Dropdown>
+            <el-dropdown @command="filterByDifficulty">
+              <el-button size="small" type="warning">
+                {{this.$i18n.t('m.Difficulty') + (query.difficulty === '' ? '筛选' : ': ' + this.$i18n.t('m.' + query.difficulty))}}
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="">{{$t('m.All')}}</el-dropdown-item>
+                <el-dropdown-item divided command="Low">{{$t('m.Low')}}</el-dropdown-item>
+                <el-dropdown-item command="Mid">{{$t('m.Mid')}}</el-dropdown-item>
+                <el-dropdown-item command="High">{{$t('m.High')}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </li>
+
+          <li>
+            <el-dropdown @command="sortBySelect">
+              <el-button size="small" type="primary">
+                问题排序方式
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon='el-icon-sort-up' command="old">时间从旧到新</el-dropdown-item>
+                <el-dropdown-item icon='el-icon-sort-down' command="new">时间从新到旧</el-dropdown-item>
+                <el-dropdown-item icon='el-icon-sort-down' divided command="correct">正确率从高到低</el-dropdown-item>
+                <el-dropdown-item icon='el-icon-sort-up' command="wrong">正确率从低到高</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </li>
+
           <li>
             <i-switch
               size="large"
@@ -33,6 +50,7 @@
               <span slot="close">{{$t('m.Tags')}}</span>
             </i-switch>
           </li>
+
           <li>
             <Input
               v-model="query.keyword"
@@ -51,22 +69,6 @@
               <Icon type="refresh"></Icon>
               随机选题
             </Button>
-          </li>
-
-          <li>
-            <el-select
-              @change='sortBySelect'
-              placeholder="请选择排序方式"
-              size="small"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
           </li>
 
         </ul>
@@ -239,23 +241,6 @@ export default {
   data () {
     return {
       tagList: [],
-      options: [{
-        value: 'old',
-        label: '时间从旧到新'
-      },
-      {
-        value: 'new',
-        label: '时间从新到旧'
-      },
-      {
-        value: 'correct',
-        label: '正确率从高到低'
-      },
-      {
-        value: 'wrong',
-        label: '正确率从低到高'
-      }
-      ],
       problemList: [],
       limit: 20,
       total: 0,
