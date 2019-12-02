@@ -58,14 +58,14 @@ export const m = {
   ACM_Helper: 'ACM 助手',
   AC_Time: 'AC 时间',
   ProblemID: '问题 ID',
-  First_Blood: '一血',
+  First_Blood: 'First Blood',
   Username: '用户名',
   Checked: '已检查',
   Not_Checked: '未检查',
   Check_It: '现在检查',
   // ACMRank.vue
   ACM_Ranklist: 'ACM 排名',
-  mood: '情态',
+  mood: '心情',
   AC: 'AC',
   Rating: '评分',
   // Announcements.vue
@@ -138,9 +138,9 @@ export const m = {
   Theme: '主题',
   Reset_to_default_code_definition: '重设返回默认代码设置',
   Upload_file: '上传文件',
-  Monokai: '物界',
-  Solarized_Light: '日光灯',
-  Material: '材料',
+  Monokai: 'Monokai',
+  Solarized_Light: 'Solarized Light',
+  Material: 'Material',
   // KatexEditor.vue
   Latex_Editor: 'Latex 编辑器',
   // NavBar.vue
@@ -232,8 +232,8 @@ export const m = {
   Share: '分享',
   UnShare: '不分享',
   Succeeded: '成功',
-  Real_Time: '真实时间',
-  Singal: '单身',
+  Real_Time: '实际时间',
+  Singal: '状态码',
   // SubmissionList.vue
   When: '时间',
   ID: 'ID',
