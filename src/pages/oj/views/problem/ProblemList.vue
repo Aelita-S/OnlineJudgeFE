@@ -29,7 +29,7 @@
           <li>
             <el-dropdown @command="sortBySelect">
               <el-button size="small" type="primary">
-                问题排序方式
+                问题排序方式{{':' +query.selected}}
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
