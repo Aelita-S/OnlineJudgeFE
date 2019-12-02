@@ -36,20 +36,6 @@
               <div class="creator"> {{$t('m.By')}} {{announcement.created_by.username}}</div>
             </div>
           </li>
-          <el-dialog
-                :visible.sync="dialogVisible"
-                width="80%"
-                :before-close="done">
-                <template slot="title">
-                  <h1 style="text-align:center;">{{this.announcement.title}}</h1>
-                </template>
-                <el-card>
-                <div v-katex v-html="this.announcement.content" key="content" class="content-container markdown-body"></div>
-                  <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="dialogVisible = false">返回</el-button>
-                  </span>
-                </el-card>
-          </el-dialog>
         </ul>
         <Pagination v-if="!isContest"
                     key="page"
@@ -60,6 +46,24 @@
       </template>
 
     </transition-group>
+
+    <el-dialog
+    :visible.sync="dialogVisible"
+    width="80%"
+    style=""
+    :before-close="done">
+      <template slot="title">
+        <h1 style="text-align:center;">{{this.announcement.title}}</h1>
+      </template>
+      <el-card>
+      <div v-katex v-html="this.announcement.content" key="content" class="content-container markdown-body"></div>
+      </el-card>
+      <span slot="footer" class="dialog-footer">
+        <el-button  type="primary" @click="dialogVisible = false">返回</el-button>
+      </span>
+
+    </el-dialog>
+
   </Panel>
 </template>
 
@@ -155,10 +159,6 @@
       goAnnouncement (announcement) {
         this.announcement = announcement
         this.dialogVisible = true
-      },
-      goBack () {
-        this.listVisible = true
-        this.announcement = ''
       }
     },
     computed: {
@@ -176,7 +176,7 @@
   }
 </script>
 
-<style scoped lang="less">
+<style  lang="less">
   .announcements-container {
     margin-top: -10px;
     margin-bottom: 10px;
@@ -222,6 +222,11 @@
         }
       }
     }
+  }
+
+  img{
+    max-width: 80%;
+    object-fit: contain;
   }
 
   .content-container {
