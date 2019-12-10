@@ -75,7 +75,7 @@
       </div>
 
       <el-table
-        @row-click='pushProblemDetail'
+        @cell-click='pushProblemDetail'
         :data="problemList"
         style="width: 100%"
       >
@@ -104,6 +104,9 @@
           prop="title"
           label="题目"
         >
+          <template v-slot='scope'>
+            <el-link  :underline="false">{{scope.row.title}}</el-link>
+          </template>
         </el-table-column>
         <el-table-column
           prop="difficulty"
@@ -294,13 +297,15 @@ export default {
         query: utils.filterEmptyValue(this.query)
       })
     },
-    pushProblemDetail (row) {
-      this.$router.push({
+    pushProblemDetail (row, col) {
+      if (col.property !== 'title') { return }
+      let route = this.$router.resolve({
         name: 'problem-details',
         params: {
           problemID: row._id
         }
       })
+      window.open(route.href, '_blank')
     },
     getProblemList () {
       let offset = (this.query.page - 1) * this.limit
