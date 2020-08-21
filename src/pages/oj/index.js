@@ -7,6 +7,7 @@ import i18n from '@/i18n'
 import VueClipboard from 'vue-clipboard2'
 import VueAnalytics from 'vue-analytics'
 import { GOOGLE_ANALYTICS_ID } from '@/utils/constants'
+import Clipboard from 'v-clipboard'
 
 import iView from 'iview'
 import locale from 'iview/dist/locale/en-US'
@@ -36,6 +37,7 @@ import 'echarts/lib/component/markPoint'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Element)
+Vue.use(Clipboard)
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {
