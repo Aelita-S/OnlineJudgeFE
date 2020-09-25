@@ -11850,6 +11850,11 @@ v-click-outside-x@^3.0.0:
   resolved "https://registry.npm.taobao.org/v-click-outside-x/download/v-click-outside-x-3.7.1.tgz#aa03eaa0e41e44cb5207dcf86c2d9f0dd64084c1"
   integrity sha1-qgPqoOQeRMtSB9z4bC2fDdZAhME=
 
+v-clipboard@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/v-clipboard/-/v-clipboard-2.2.3.tgz#f5db3d7004145041b6d7d06ca48236de4cee3a41"
+  integrity sha512-Wg+ObZoYK6McHb5OOCFWvm0R7xHp0/p0G1ocx/8bO22jvA/yVY05rADbfiztwCokXBNfQuGv/XSd1ozcTFgekw==
+
 v8-compile-cache@2.0.3:
   version "2.0.3"
   resolved "https://registry.npm.taobao.org/v8-compile-cache/download/v8-compile-cache-2.0.3.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fv8-compile-cache%2Fdownload%2Fv8-compile-cache-2.0.3.tgz#00f7494d2ae2b688cfe2899df6ed2c54bef91dbe"

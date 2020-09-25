@@ -75,7 +75,7 @@
       </div>
 
       <el-table
-        @cell-click='pushProblemDetail'
+        @row-click='pushProblemDetail'
         :data="problemList"
         style="width: 100%"
       >
@@ -297,20 +297,19 @@ export default {
       })
     },
     pushProblemDetail (row, col) {
-      if (col.property !== 'title') { return }
-      // let route = this.$router.resolve({
-      //   name: 'problem-details',
-      //   params: {
-      //     problemID: row._id
-      //   }
-      // })                                               /*   在新的页面跳转   */
-      // window.open(route.href, '_blank')
-      this.$router.push({
+      let route = this.$router.resolve({
         name: 'problem-details',
-        params: {                                         /*   在本页面打开        */
+        params: {
           problemID: row._id
         }
-      })
+      })                                               /*   在新的页面跳转   */
+      window.open(route.href, '_blank')
+      // this.$router.push({
+      //   name: 'problem-details',
+      //   params: {                                         /*   在本页面打开        */
+      //     problemID: row._id
+      //   }
+      // })
     },
     getProblemList () {
       let offset = (this.query.page - 1) * this.limit
