@@ -82,7 +82,7 @@
           <FormItem label="姓名">
             <Input v-model="formProfile.real_name"/>
           </FormItem>
-          <Form-item label="昵称（开发中）">
+          <Form-item label="昵称">
             <Input v-model="formProfile.school"/>
           </Form-item>
           <!--<FormItem label="Language">
@@ -96,7 +96,7 @@
         </Col>
 
         <Col :span="11">
-          <Form-item label="学号">
+          <Form-item label="心情">
             <Input v-model="formProfile.mood"/>
           </Form-item>
          

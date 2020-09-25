@@ -3,7 +3,7 @@
     type="flex"
     :gutter="18"
   >
-    <Col :span=19>
+    <Col :span='19'>
     <Panel
       shadow
       style="min-width:900px;"
@@ -84,7 +84,7 @@
           label="状态"
           width="50"
         >
-          <template v-slot='scope'>
+          <template slot-scope='scope'>
             <Icon
               v-if="scope.row.my_status === null || scope.row.my_status === undefined?false:true"
               :type="scope.row.my_status === 0 ? 'checkmark-round' : 'minus-round'"
@@ -101,10 +101,9 @@
         >
         </el-table-column>
         <el-table-column
-          prop="title"
           label="题目"
         >
-          <template v-slot='scope'>
+          <template slot-scope='scope'>
             <el-link  :underline="false">{{scope.row.title}}</el-link>
           </template>
         </el-table-column>
@@ -113,7 +112,7 @@
           label="难度"
           width="150"
         >
-          <template v-slot='scope'>
+          <template slot-scope='scope'>
             <Tag
               :color="getColor(scope.row.difficulty)"
               style='width:30px'
@@ -131,7 +130,7 @@
           label="通过率"
           width="225"
         >
-          <template v-slot='scope'>
+          <template slot-scope='scope'>
             <el-progress
               v-if="scope.row.submission_number>=10"
               stroke-width='15px'
@@ -150,7 +149,7 @@
           v-if="tagVisible"
           label="标签"
         >
-          <template v-slot='scope'>
+          <template slot-scope='scope'>
             <template v-for="tag in scope.row.tags">
               <el-tag style="padding: 2px; margin:4px 4px;">{{tag}}</el-tag>
             </template>

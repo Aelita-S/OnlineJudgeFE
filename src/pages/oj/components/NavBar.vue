@@ -65,7 +65,7 @@
         <div style="float:right">
           <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
             <Button type="text" class="drop-menu-title">
-              {{ user.username }}
+              {{ profile.school === '' ? user.username : profile.school }}
               <Icon type="arrow-down-b"></Icon>
             </Button>
             <Dropdown-menu slot="list">
