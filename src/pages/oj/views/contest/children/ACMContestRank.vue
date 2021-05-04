@@ -1,4 +1,5 @@
 <template>
+  <div>
   <Panel shadow>
     <div slot="title">{{ contest.title }}</div>
     <div slot="extra">
@@ -33,16 +34,22 @@
       </Poptip>
     </div>
     <div v-show="showChart" class="echarts">
-      <ECharts :options="options" ref="chart" auto-resize></ECharts>
+      <ECharts style="width:85%;" :options="options" ref="chart" auto-resize></ECharts>
     </div>
-    <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover width="1600" height="600"></Table>
-    <Pagination :total="total"
-                :page-size.sync="limit"
-                :current.sync="page"
-                @on-change="getContestRankData"
-                @on-page-size-change="getContestRankData(1)"
-                show-sizer></Pagination>
   </Panel>
+
+  <el-card style="max-width:100%;">
+        <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover width="1200" height="600"></Table>
+  </el-card>
+  <Pagination :total="total"
+            :page-size.sync="limit"
+            :current.sync="page"
+            @on-change="getContestRankData"
+            @on-page-size-change="getContestRankData(1)"
+            show-sizer>
+  </Pagination>
+
+  </div>
 </template>
 <script>
   import moment from 'moment'

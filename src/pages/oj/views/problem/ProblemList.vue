@@ -3,7 +3,7 @@
     type="flex"
     :gutter="18"
   >
-    <Col :span=19>
+    <Col :span='19'>
     <Panel
       shadow
       style="min-width:900px;"
@@ -12,18 +12,35 @@
       <div slot="extra">
         <ul class="filter">
           <li>
-            <Dropdown @on-click="filterByDifficulty">
-              <span>{{query.difficulty === '' ? this.$i18n.t('m.Difficulty') : this.$i18n.t('m.' + query.difficulty)}}
-                <Icon type="arrow-down-b"></Icon>
-              </span>
-              <Dropdown-menu slot="list">
-                <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
-                <Dropdown-item name="Low">{{$t('m.Low')}}</Dropdown-item>
-                <Dropdown-item name="Mid">{{$t('m.Mid')}}</Dropdown-item>
-                <Dropdown-item name="High">{{$t('m.High')}}</Dropdown-item>
-              </Dropdown-menu>
-            </Dropdown>
+            <el-dropdown @command="filterByDifficulty">
+              <el-button size="small" type="warning">
+                {{this.$i18n.t('m.Difficulty') + (query.difficulty === '' ? '筛选' : ': ' + this.$i18n.t('m.' + query.difficulty))}}
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="">{{$t('m.All')}}</el-dropdown-item>
+                <el-dropdown-item divided command="Low">{{$t('m.Low')}}</el-dropdown-item>
+                <el-dropdown-item command="Mid">{{$t('m.Mid')}}</el-dropdown-item>
+                <el-dropdown-item command="High">{{$t('m.High')}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </li>
+
+          <li>
+            <el-dropdown @command="sortBySelect">
+              <el-button size="small" type="primary">
+                问题排序方式{{':' +query.selected}}
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon='el-icon-sort-up' command="old">时间从旧到新</el-dropdown-item>
+                <el-dropdown-item icon='el-icon-sort-down' command="new">时间从新到旧</el-dropdown-item>
+                <el-dropdown-item icon='el-icon-sort-down' divided command="correct">正确率从高到低</el-dropdown-item>
+                <el-dropdown-item icon='el-icon-sort-up' command="wrong">正确率从低到高</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </li>
+
           <li>
             <i-switch
               size="large"
@@ -33,6 +50,7 @@
               <span slot="close">{{$t('m.Tags')}}</span>
             </i-switch>
           </li>
+
           <li>
             <Input
               v-model="query.keyword"
@@ -51,23 +69,6 @@
               <Icon type="refresh"></Icon>
               随机选题
             </Button>
-          </li>
-
-          <li>
-            <span>排序方式:</span>
-            <el-select
-              v-model="selectHowToShow"
-              placeholder="请选择排序方式"
-              size="small"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
           </li>
 
         </ul>
@@ -100,9 +101,11 @@
         >
         </el-table-column>
         <el-table-column
-          prop="title"
           label="题目"
         >
+          <template slot-scope='scope'>
+            <el-link  :underline="false">{{scope.row.title}}</el-link>
+          </template>
         </el-table-column>
         <el-table-column
           prop="difficulty"
@@ -148,7 +151,7 @@
         >
           <template slot-scope='scope'>
             <template v-for="tag in scope.row.tags">
-              <el-tag style="padding: 2px;margin:4px 4px;">{{tag}}</el-tag>
+              <el-tag style="padding: 2px; margin:4px 4px;">{{tag}}</el-tag>
             </template>
           </template>
         </el-table-column>
@@ -239,25 +242,7 @@ export default {
   },
   data () {
     return {
-      selectHowToShow: 'old',
       tagList: [],
-      options: [{
-        value: 'old',
-        label: '时间从旧到新'
-      },
-      {
-        value: 'new',
-        label: '时间从新到旧'
-      },
-      {
-        value: 'correct',
-        label: '正确率从高到低'
-      },
-      {
-        value: 'wrong',
-        label: '正确率从低到高'
-      }
-      ],
       problemList: [],
       limit: 20,
       total: 0,
@@ -270,7 +255,8 @@ export default {
         keyword: '',
         difficulty: '',
         tag: '',
-        page: 1
+        page: 1,
+        selected: ''
       }
     }
   },
@@ -284,6 +270,7 @@ export default {
       let query = this.$route.query
       this.query.difficulty = query.difficulty || ''
       this.query.keyword = query.keyword || ''
+      this.query.selected = query.selected || 'old'// 使得返回时能够按照点击前显示
       this.query.tag = query.tag || ''
       this.query.page = parseInt(query.page) || 1
       if (this.query.page < 1) {
@@ -309,28 +296,40 @@ export default {
         query: utils.filterEmptyValue(this.query)
       })
     },
-    pushProblemDetail (row) {
-      this.$router.push({
+    pushProblemDetail (row, col) {
+      let route = this.$router.resolve({
         name: 'problem-details',
         params: {
           problemID: row._id
         }
-      })
+      })                                               /*   在新的页面跳转   */
+      window.open(route.href, '_blank')
+      // this.$router.push({
+      //   name: 'problem-details',
+      //   params: {                                         /*   在本页面打开        */
+      //     problemID: row._id
+      //   }
+      // })
     },
     getProblemList () {
       let offset = (this.query.page - 1) * this.limit
+      let selected = this.query.selected
       var isReserved = false
       var sortByAC = false
-      if (this.selectHowToShow === 'new') {
+
+      // 筛选排序方式
+      // @ToDo: 将该逻辑移到后台
+      if (selected === 'new') {
         isReserved = true
         sortByAC = false
-      } else if (this.selectHowToShow === 'correct') {
+      } else if (selected === 'correct') {
         isReserved = true
         sortByAC = true
-      } else if (this.selectHowToShow === 'wrong') {
+      } else if (selected === 'wrong') {
         isReserved = false
         sortByAC = true
       }
+
       api.getProblemList(offset, this.limit, isReserved, sortByAC, this.query).then(res => {
         this.problemList = res.data.data.results
         this.total = res.data.data.total
@@ -367,6 +366,10 @@ export default {
       this.query.page = 1
       this.pushRouter()
     },
+    sortBySelect (selected) {
+      this.query.selected = selected
+      this.pushRouter()
+    },
     onReset () {
       this.disabledTagList = []
       this.getTagList()
@@ -400,9 +403,6 @@ export default {
       if (newVal === true) {
         this.init()
       }
-    },
-    selectHowToShow (newVal) {
-      this.getProblemList()
     }
   }
 }

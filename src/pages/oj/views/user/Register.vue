@@ -112,6 +112,10 @@
             {required: true, trigger: 'blur'},
             {validator: CheckUsernameNotExist, trigger: 'blur'}
           ],
+          Name: [
+            {required: true, trigger: 'blur'},
+            {validator: CheckUsernameNotExist, trigger: 'blur'}
+          ],
           email: [
             {required: true, type: 'email', trigger: 'blur'},
             {validator: CheckEmailNotExist, trigger: 'blur'}

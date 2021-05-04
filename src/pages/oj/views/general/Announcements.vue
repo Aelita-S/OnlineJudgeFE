@@ -4,8 +4,7 @@
       公告
     </div>
     <div slot="extra">
-      <Button v-if="listVisible" type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
-      <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{$t('m.Back')}}</Button>
+      <Button type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
     </div>
 
     <div align="center" slot="title" v-if="!listVisible" >
@@ -15,7 +14,7 @@
       <div class="no-announcement" v-if="!announcements.length" key="no-announcement">
         <p>{{$t('m.No_Announcements')}}</p>
       </div>
-      <template v-if="listVisible">
+      <template>
         <ul class="announcements-container" key="list">
           <li v-for="announcement in announcements" :key="announcement.title">
             <div class="flex-container">
@@ -46,10 +45,25 @@
         </Pagination>
       </template>
 
-      <template v-else>
-        <div v-katex v-html="announcement.content" key="content" class="content-container markdown-body"></div>
-      </template>
     </transition-group>
+
+    <el-dialog
+    :visible.sync="dialogVisible"
+    width="80%"
+    style=""
+    :before-close="done">
+      <template slot="title">
+        <h1 style="text-align:center;">{{this.announcement.title}}</h1>
+      </template>
+      <el-card>
+      <div v-katex v-html="this.announcement.content" key="content" class="content-container markdown-body"></div>
+      </el-card>
+      <span slot="footer" class="dialog-footer">
+        <el-button  type="primary" @click="dialogVisible = false">返回</el-button>
+      </span>
+
+    </el-dialog>
+
   </Panel>
 </template>
 
@@ -69,7 +83,8 @@
         btnLoading: false,
         announcements: [],
         announcement: '',
-        listVisible: true
+        listVisible: true,
+        dialogVisible: false
       }
     },
     mounted () {
@@ -143,11 +158,7 @@
       },
       goAnnouncement (announcement) {
         this.announcement = announcement
-        this.listVisible = false
-      },
-      goBack () {
-        this.listVisible = true
-        this.announcement = ''
+        this.dialogVisible = true
       }
     },
     computed: {
@@ -165,7 +176,7 @@
   }
 </script>
 
-<style scoped lang="less">
+<style  lang="less">
   .announcements-container {
     margin-top: -10px;
     margin-bottom: 10px;
@@ -211,6 +222,11 @@
         }
       }
     }
+  }
+
+  img{
+    max-width: 100%;
+    object-fit: contain;
   }
 
   .content-container {

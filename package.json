@@ -12,6 +12,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "@vue/cli": "^4.1.1",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "browser-detect": "^0.2.27",
@@ -27,6 +28,7 @@
     "screenfull": "^3.3.2",
     "tar-simditor": "^3.0.5",
     "tar-simditor-markdown": "^1.2.3",
+    "v-clipboard": "^2.2.3",
     "vue": "^2.5.16",
     "vue-analytics": "^5.10.4",
     "vue-clipboard2": "^0.2.1",
@@ -49,6 +51,7 @@
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
     "chalk": "^2.4.1",
+    "compression-webpack-plugin": "1.1.11",
     "connect-history-api-fallback": "^1.3.0",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",

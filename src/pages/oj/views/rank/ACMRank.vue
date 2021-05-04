@@ -63,6 +63,11 @@
             }
           },
           {
+            title: '昵称',
+            align: 'center',
+            key: 'school'
+          },
+          {
             title: this.$i18n.t('m.mood'),
             align: 'center',
             key: 'mood'
